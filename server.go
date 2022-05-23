@@ -1,12 +1,12 @@
-package kvraft
+package pegasus
 
 import (
-	"6.824/labgob"
+	"fmt"
+	"log"
+	"sync/atomic"
+
 	"6.824/labrpc"
 	"6.824/raft"
-	"log"
-	"sync"
-	"sync/atomic"
 )
 
 const Debug = false
@@ -18,32 +18,25 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 	return
 }
 
-
-type Op struct {
-	// Your definitions here.
-	// Field names must start with capital letters,
-	// otherwise RPC will break.
-}
-
-type KVServer struct {
-	mu      sync.Mutex
-	me      int
-	rf      *raft.Raft
-	applyCh chan raft.ApplyMsg
-	dead    int32 // set by Kill()
-
-	maxraftstate int // snapshot if log grows this big
-
-	// Your definitions here.
-}
-
-
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 	// Your code here.
 }
 
 func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	// Your code here.
+	_, isLeader := kv.rf.GetState()
+	if !isLeader {
+		reply.Err = ErrWrongLeader
+		return
+	}
+	// we're the leader! Start an agreement for this key.
+	command := Command{
+		Id:    kv.getId(),
+		Op:    args.Op,
+		Key:   args.Key,
+		Value: args.Value,
+	}
+	kv.rf.Start(command)
 }
 
 //
@@ -82,10 +75,9 @@ func (kv *KVServer) killed() bool {
 // for any long-running work.
 //
 func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int) *KVServer {
-	// call labgob.Register on structures you want
+	// TODO call labgob.Register on structures you want
 	// Go's RPC library to marshall/unmarshall.
-	labgob.Register(Op{})
-
+	logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 	kv := new(KVServer)
 	kv.me = me
 	kv.maxraftstate = maxraftstate
@@ -98,4 +90,15 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	// You may need initialization code here.
 
 	return kv
+}
+
+func (kv *KVServer) IsLeader(args *FindLeaderArgs, reply *FindLeaderReply) {
+	_, reply.IsLeader = kv.rf.GetState()
+}
+
+func (kv *KVServer) getId() int {
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+	kv.counter += 1
+	return kv.counter
 }

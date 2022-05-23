@@ -1,4 +1,4 @@
-package kvraft
+package pegasus
 
 import (
 	"fmt"
