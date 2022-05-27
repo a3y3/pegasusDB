@@ -5,6 +5,7 @@ import (
 	"log"
 	"sync/atomic"
 
+	"6.824/labgob"
 	"6.824/labrpc"
 	"6.824/raft"
 )
@@ -19,24 +20,38 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 }
 
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
-	// Your code here.
-}
 
-func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
-	// Your code here.
-	_, isLeader := kv.rf.GetState()
+	command := Command{
+		Id:    kv.getId(),
+		Op:    GetVal,
+		Key:   args.Key,
+		Value: "",
+	}
+	_, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	// we're the leader! Start an agreement for this key.
+	kv.logMsg(KV_GET, "Waiting on getCh...")
+	value := <-kv.getCh
+	reply.Value = value
+	kv.logMsg(KV_GET, fmt.Sprintf("Received %v on getCh!", value))
+
+}
+
+func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	command := Command{
 		Id:    kv.getId(),
 		Op:    args.Op,
 		Key:   args.Key,
 		Value: args.Value,
 	}
-	kv.rf.Start(command)
+	// we're the leader! Start an agreement for this key.
+	_, _, isLeader := kv.rf.Start(command)
+	if !isLeader {
+		reply.Err = ErrWrongLeader
+		return
+	}
 }
 
 //
@@ -76,20 +91,50 @@ func (kv *KVServer) killed() bool {
 //
 func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int) *KVServer {
 	// TODO call labgob.Register on structures you want
+	labgob.Register(Command{})
 	// Go's RPC library to marshall/unmarshall.
-	logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 	kv := new(KVServer)
 	kv.me = me
 	kv.maxraftstate = maxraftstate
+	kv.stateMachine = make(map[string]string)
+	kv.getCh = make(chan string)
+	kv.logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 
 	// You may need initialization code here.
 
 	kv.applyCh = make(chan raft.ApplyMsg)
+	go kv.listenOnApplyCh()
 	kv.rf = raft.Make(servers, me, persister, kv.applyCh)
 
 	// You may need initialization code here.
 
 	return kv
+}
+
+func (kv *KVServer) listenOnApplyCh() {
+	for applyMsg := range kv.applyCh {
+		kv.mu.Lock()
+		command := applyMsg.Command.(Command)
+		key := command.Key
+		value := command.Value
+		operation := command.Op
+		if operation == PutVal {
+			kv.stateMachine[key] = value
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Updated value for %v to %v", key, kv.stateMachine[key]))
+		} else if operation == AppendVal {
+			prevValue := kv.stateMachine[key]
+			kv.stateMachine[key] = prevValue + value
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Append value to key %v. New value is %v", key, kv.stateMachine[key]))
+		} else {
+			_, isLeader := kv.rf.GetState()
+			if isLeader {
+				kv.logMsg(KV_APPLYCH, fmt.Sprintf("Op is obviously %v, so sending on getCh", operation))
+				kv.getCh <- kv.stateMachine[key]
+				kv.logMsg(KV_APPLYCH, "Sent on getCh!")
+			}
+		}
+		kv.mu.Unlock()
+	}
 }
 
 func (kv *KVServer) IsLeader(args *FindLeaderArgs, reply *FindLeaderReply) {

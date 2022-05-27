@@ -36,7 +36,9 @@ type KVServer struct {
 
 	maxraftstate int // snapshot if log grows this big
 
-	counter int
+	counter      int
+	stateMachine map[string]string
+	getCh        chan string
 }
 
 type Op string
@@ -52,9 +54,12 @@ type Topic string
 const (
 	CK_SETUP         Topic = "CK_SETUP"
 	CK_UPDATE_LEADER Topic = "CK_UPDATE_LEADER"
+	CK_GET           Topic = "CK_GET"
 	CK_PUTAPPEND     Topic = "CK_PUTAPPEND"
 
-	KV_SETUP Topic = "KV_SETUP"
+	KV_SETUP   Topic = "KV_SETUP"
+	KV_APPLYCH Topic = "KV_APPLYCH"
+	KV_GET     Topic = "KV_GET"
 )
 
 type Err string
@@ -120,10 +125,17 @@ func init() {
 }
 
 // Logs a message with a specific topic.
-// This is a safe method and will acquire locks to log the latest value of each variable, so locks should not be held when calling this function.
 func logMsg(topic Topic, msg string) {
 	if debugVerbosity >= 1 {
 		time := time.Since(debugStart).Milliseconds()
 		log.Printf("%v %v %v\n", time, topic, msg)
+	}
+}
+
+// Logs a message with a specific topic.
+func (kv *KVServer) logMsg(topic Topic, msg string) {
+	if debugVerbosity >= 1 {
+		time := time.Since(debugStart).Milliseconds()
+		log.Printf("%v %v K%v %v\n", time, topic, kv.me, msg)
 	}
 }

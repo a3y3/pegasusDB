@@ -20,7 +20,6 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 	ck := new(Clerk)
 	ck.servers = servers
 	logMsg(CK_SETUP, "Clerk initializing!")
-	go ck.updateCurrentLeader()
 	return ck
 }
 
@@ -37,8 +36,22 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 // arguments. and reply must be passed as a pointer.
 //
 func (ck *Clerk) Get(key string) string {
-
-	// You will have to modify this function.
+	getArgs := GetArgs{
+		Key: key,
+	}
+	getReply := GetReply{}
+	ok := ck.servers[ck.currentLeader].Call("KVServer.Get", &getArgs, &getReply)
+	if ok {
+		if getReply.Err == ErrWrongLeader {
+			logMsg(CK_GET, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
+			ck.updateCurrentLeader()
+		}
+		value := getReply.Value
+		logMsg(CK_GET, fmt.Sprintf("Found value %v for key %v", value, key))
+		return value
+	} else {
+		logMsg(CK_GET, "Get RPC failed!")
+	}
 	return ""
 }
 
@@ -58,25 +71,27 @@ func (ck *Clerk) PutAppend(key string, value string, op Op) {
 		Value: value,
 		Op:    op,
 	}
-	putAppendReply := PutAppendReply{}
-	ok := ck.servers[ck.currentLeader].Call("KVServer.PutAppend", &putAppendArgs, &putAppendReply)
-	if ok {
+	ok := false
+	for !ok {
+		putAppendReply := PutAppendReply{}
+		ok = ck.servers[ck.currentLeader].Call("KVServer.PutAppend", &putAppendArgs, &putAppendReply)
 		if putAppendReply.Err == ErrWrongLeader {
 			logMsg(CK_PUTAPPEND, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
 			ck.updateCurrentLeader()
+			ok = false
 		} else {
 			logMsg(CK_PUTAPPEND, fmt.Sprintf("PutAppend successful for key=%v", key))
+			break
 		}
-	} else {
-		logMsg(CK_PUTAPPEND, "PutAppend failed!")
+		logMsg(CK_PUTAPPEND, "PutAppend RPC failed!")
 	}
 }
 
 func (ck *Clerk) Put(key string, value string) {
-	ck.PutAppend(key, value, "Put")
+	ck.PutAppend(key, value, PutVal)
 }
 func (ck *Clerk) Append(key string, value string) {
-	ck.PutAppend(key, value, "Append")
+	ck.PutAppend(key, value, AppendVal)
 }
 
 func (ck *Clerk) updateCurrentLeader() {

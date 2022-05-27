@@ -1,0 +1,1351 @@
+0 KV_SETUP K0 Initialized peagasus server S0!
+0 PERSIST follower T0 S0 Read state. votedFor: -1, term: 0, entries: [] (offset: 0)
+0 KV_SETUP K1 Initialized peagasus server S1!
+0 PERSIST follower T0 S1 Read state. votedFor: -1, term: 0, entries: [] (offset: 0)
+0 KV_SETUP K2 Initialized peagasus server S2!
+0 PERSIST follower T0 S2 Read state. votedFor: -1, term: 0, entries: [] (offset: 0)
+0 TIMER follower T0 S0 Sleeping for 489ms ms
+0 TIMER follower T0 S2 Sleeping for 289ms ms
+0 TIMER follower T0 S1 Sleeping for 321ms ms
+0 KV_SETUP K3 Initialized peagasus server S3!
+0 PERSIST follower T0 S3 Read state. votedFor: -1, term: 0, entries: [] (offset: 0)
+0 KV_SETUP K4 Initialized peagasus server S4!
+0 TIMER follower T0 S3 Sleeping for 421ms ms
+0 PERSIST follower T0 S4 Read state. votedFor: -1, term: 0, entries: [] (offset: 0)
+Test: one client (3A) ...
+0 TIMER follower T0 S4 Sleeping for 452ms ms
+0 CK_SETUP Clerk initializing!
+1 CK_SETUP Clerk initializing!
+1 CK_PUTAPPEND Contacted wrong leader (0), updating leader list...
+1 CK_UPDATE_LEADER S0 is not the leader
+1 CK_UPDATE_LEADER S1 is not the leader
+1 CK_UPDATE_LEADER S2 is not the leader
+1 CK_UPDATE_LEADER S3 is not the leader
+1 CK_UPDATE_LEADER S4 is not the leader
+1 CK_UPDATE_LEADER Found no leader, going to sleep...
+101 CK_UPDATE_LEADER S0 is not the leader
+102 CK_UPDATE_LEADER S1 is not the leader
+102 CK_UPDATE_LEADER S2 is not the leader
+102 CK_UPDATE_LEADER S3 is not the leader
+102 CK_UPDATE_LEADER S4 is not the leader
+102 CK_UPDATE_LEADER Found no leader, going to sleep...
+202 CK_UPDATE_LEADER S0 is not the leader
+202 CK_UPDATE_LEADER S1 is not the leader
+203 CK_UPDATE_LEADER S2 is not the leader
+203 CK_UPDATE_LEADER S3 is not the leader
+203 CK_UPDATE_LEADER S4 is not the leader
+203 CK_UPDATE_LEADER Found no leader, going to sleep...
+290 TIMER follower T0 S2 Did not receive a heartbeat! Starting election...
+290 TIMER follower T0 S2 Sleeping for 289ms ms
+290 ELECTION candidate T1 S2 Started new term as a candidate!
+290 ELECTION candidate T1 S2 Requesting vote from 4
+290 ELECTION candidate T1 S2 Requesting vote from 1
+290 ELECTION candidate T1 S2 Requesting vote from 0
+290 ELECTION candidate T1 S2 Requesting vote from 3
+290 VOTE follower T1 S4 Changed my term before voting!
+290 VOTE follower T1 S4 voting yes for 2!
+291 VOTE follower T1 S3 Changed my term before voting!
+291 VOTE follower T1 S3 voting yes for 2!
+291 ELECTION candidate T1 S2 Got rpc reply with term 1 and vote true.
+291 ELECTION candidate T1 S2 Got rpc reply with term 1 and vote true.
+291 ELECTION candidate T1 S2 got majority (3 out of  5 votes) so becoming leader
+
+291 VOTE follower T1 S0 Changed my term before voting!
+291 VOTE follower T1 S0 voting yes for 2!
+290 VOTE follower T1 S1 Changed my term before voting!
+291 VOTE follower T1 S1 voting yes for 2!
+291 LEADER leader T1 S2 Starting my reign as a leader!
+291 LEADER leader T1 S2 Sending HBs
+291 LEADER leader T1 S2 Sent HBs
+291 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [] (offset: 0)
+291 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 0 to 0
+291 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [] (offset: 0)
+291 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 0 to 0
+291 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [] (offset: 0)
+291 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 0 to 0
+291 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [] (offset: 0)
+291 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 0 to 0
+304 CK_UPDATE_LEADER S0 is not the leader
+304 CK_UPDATE_LEADER S1 is not the leader
+304 CK_UPDATE_LEADER S2 is not the leader
+304 CK_UPDATE_LEADER S3 is not the leader
+304 CK_UPDATE_LEADER Found new leader S4
+304 CK_PUTAPPEND PutAppend RPC failed!
+305 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1);] (offset: 0)
+305 CK_PUTAPPEND PutAppend successful for key=0
+305 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1);] (offset: 0)
+305 KV_GET K2 Waiting on getCh...
+321 TIMER follower T1 S1 Sleeping for 264ms ms
+422 TIMER follower T1 S3 Sleeping for 302ms ms
+441 LEADER leader T1 S2 Sending HBs
+442 LEADER leader T1 S2 Sent HBs
+442 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1);] (offset: 0)
+442 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1);] (offset: 0)
+442 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1);] (offset: 0)
+442 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1);] (offset: 0)
+442 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 0 to 2
+442 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 0 to 2
+442 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 1! Updating commitIndex
+442 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 0 to 2
+442 KV_APPLYCH K2 Updated value for 0 to 
+442 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 0 to 2
+442 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+442 KV_APPLYCH K2 Sent on getCh!
+442 KV_GET K2 Received  on getCh!
+442 CK_GET Found value  for key 0
+442 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1);] (offset: 0)
+442 CK_PUTAPPEND PutAppend successful for key=0
+442 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1);] (offset: 0)
+442 CK_PUTAPPEND PutAppend successful for key=0
+443 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1);] (offset: 0)
+443 CK_PUTAPPEND PutAppend successful for key=0
+443 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1);] (offset: 0)
+443 KV_GET K2 Waiting on getCh...
+454 TIMER follower T1 S4 Sleeping for 444ms ms
+489 TIMER follower T1 S0 Sleeping for 323ms ms
+579 TIMER leader T1 S2 Sleeping for 268ms ms
+586 TIMER follower T1 S1 Sleeping for 264ms ms
+592 LEADER leader T1 S2 Sending HBs
+592 LEADER leader T1 S2 Sent HBs
+592 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1);] (offset: 0)
+592 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 1
+592 KV_APPLYCH K4 Updated value for 0 to 
+592 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1);] (offset: 0)
+592 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 1
+592 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1);] (offset: 0)
+592 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 1
+592 KV_APPLYCH K1 Updated value for 0 to 
+592 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 2 to 6
+592 KV_APPLYCH K0 Updated value for 0 to 
+592 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 2 to 6
+592 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 5! Updating commitIndex
+592 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1);] (offset: 0)
+592 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 1
+592 KV_APPLYCH K3 Updated value for 0 to 
+592 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 y
+592 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 y
+592 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 2 to 6
+592 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 y
+592 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 2 to 6
+592 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+592 KV_APPLYCH K2 Sent on getCh!
+592 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 y on getCh!
+592 CK_GET Found value x 0 0 yx 0 1 yx 0 2 y for key 0
+593 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+593 KV_GET K2 Waiting on getCh...
+725 TIMER follower T1 S3 Sleeping for 302ms ms
+743 LEADER leader T1 S2 Sending HBs
+743 LEADER leader T1 S2 Sent HBs
+743 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+743 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 5
+743 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+743 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 y
+743 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+743 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 5
+743 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 y
+743 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+744 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 5
+744 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 y
+744 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 y
+744 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 y
+743 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 5
+744 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 y
+744 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 y
+744 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 y
+743 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 y
+744 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 y
+743 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 y
+744 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 y
+744 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 6 to 7
+744 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 6 to 7
+744 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 6! Updating commitIndex
+744 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+744 KV_APPLYCH K2 Sent on getCh!
+744 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 y on getCh!
+744 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 6 to 7
+744 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 6 to 7
+744 CK_GET Found value x 0 0 yx 0 1 yx 0 2 y for key 0
+744 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+744 KV_GET K2 Waiting on getCh...
+813 TIMER follower T1 S0 Sleeping for 323ms ms
+848 TIMER leader T1 S2 Sleeping for 268ms ms
+850 TIMER follower T1 S1 Sleeping for 264ms ms
+894 LEADER leader T1 S2 Sending HBs
+894 LEADER leader T1 S2 Sent HBs
+894 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+895 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 6
+894 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+895 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+895 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 6
+895 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+895 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 6
+895 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 7 to 8
+895 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 6
+895 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 7 to 8
+895 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 7! Updating commitIndex
+895 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+895 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 7 to 8
+895 KV_APPLYCH K2 Sent on getCh!
+895 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 y on getCh!
+895 CK_GET Found value x 0 0 yx 0 1 yx 0 2 y for key 0
+895 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 7 to 8
+895 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+895 CK_PUTAPPEND PutAppend successful for key=0
+895 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+895 CK_PUTAPPEND PutAppend successful for key=0
+896 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+896 KV_GET K2 Waiting on getCh...
+899 TIMER follower T1 S4 Sleeping for 444ms ms
+1027 TIMER follower T1 S3 Sleeping for 302ms ms
+1045 LEADER leader T1 S2 Sending HBs
+1045 LEADER leader T1 S2 Sent HBs
+1045 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1045 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 7
+1045 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1045 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 7
+1045 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1045 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 7
+1045 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1045 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 7
+1045 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 8 to 11
+1045 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 8 to 11
+1046 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 10! Updating commitIndex
+1046 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 8 to 11
+1046 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 y
+1046 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 y
+1046 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+1046 KV_APPLYCH K2 Sent on getCh!
+1046 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 y on getCh!
+1045 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 8 to 11
+1046 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 y for key 0
+1046 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1046 CK_PUTAPPEND PutAppend successful for key=0
+1046 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1046 CK_PUTAPPEND PutAppend successful for key=0
+1046 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1046 KV_GET K2 Waiting on getCh...
+1115 TIMER follower T1 S1 Sleeping for 264ms ms
+1116 TIMER leader T1 S2 Sleeping for 268ms ms
+1137 TIMER follower T1 S0 Sleeping for 323ms ms
+1196 LEADER leader T1 S2 Sending HBs
+1196 LEADER leader T1 S2 Sent HBs
+1196 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1196 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 10
+1196 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 y
+1196 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 y
+1196 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1196 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1196 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 10
+1196 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 y
+1196 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 y
+1196 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1196 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 10
+1196 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 11 to 14
+1196 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 y
+1196 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 y
+1196 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 11 to 14
+1196 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 13! Updating commitIndex
+1196 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 y
+1196 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 y
+1196 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+1196 KV_APPLYCH K2 Sent on getCh!
+1196 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 y on getCh!
+1196 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 10
+1196 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 y
+1196 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 y
+1196 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 y for key 0
+1196 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 11 to 14
+1196 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 11 to 14
+1196 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1197 CK_PUTAPPEND PutAppend successful for key=0
+1197 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1197 KV_GET K2 Waiting on getCh...
+1329 TIMER follower T1 S3 Sleeping for 302ms ms
+1344 TIMER follower T1 S4 Sleeping for 444ms ms
+1346 LEADER leader T1 S2 Sending HBs
+1346 LEADER leader T1 S2 Sent HBs
+1346 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1347 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 13
+1347 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 y
+1347 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 y
+1347 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 14 to 16
+1347 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1347 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 13
+1347 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 y
+1347 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 y
+1347 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1347 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 13
+1347 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 y
+1347 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 y
+1347 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1347 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 13
+1347 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 y
+1347 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 y
+1347 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 14 to 16
+1347 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 15! Updating commitIndex
+1347 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y
+1347 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+1347 KV_APPLYCH K2 Sent on getCh!
+1347 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y on getCh!
+1347 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 14 to 16
+1347 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 14 to 16
+1347 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y for key 0
+1347 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1347 KV_GET K2 Waiting on getCh...
+1379 TIMER follower T1 S1 Sleeping for 264ms ms
+1385 TIMER leader T1 S2 Sleeping for 268ms ms
+1460 TIMER follower T1 S0 Sleeping for 323ms ms
+1497 LEADER leader T1 S2 Sending HBs
+1497 LEADER leader T1 S2 Sent HBs
+1497 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1497 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1497 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 15
+1497 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y
+1497 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1497 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 15
+1497 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y
+1497 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1498 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 15
+1498 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y
+1497 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 15
+1498 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y
+1498 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 16 to 17
+1497 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 16 to 17
+1498 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 16! Updating commitIndex
+1498 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+1498 KV_APPLYCH K2 Sent on getCh!
+1498 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y on getCh!
+1498 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 16 to 17
+1498 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 16 to 17
+1498 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y for key 0
+1498 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1498 KV_GET K2 Waiting on getCh...
+1632 TIMER follower T1 S3 Sleeping for 302ms ms
+1644 TIMER follower T1 S1 Sleeping for 264ms ms
+1648 LEADER leader T1 S2 Sending HBs
+1648 LEADER leader T1 S2 Sent HBs
+1648 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1648 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 16
+1648 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1648 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1648 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 16
+1648 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1648 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 17 to 18
+1648 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 16
+1648 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 17 to 18
+1648 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 17! Updating commitIndex
+1648 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+1648 KV_APPLYCH K2 Sent on getCh!
+1648 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y on getCh!
+1648 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 17 to 18
+1648 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 16
+1648 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y for key 0
+1648 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 17 to 18
+1648 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1648 KV_GET K2 Waiting on getCh...
+1653 TIMER leader T1 S2 Sleeping for 268ms ms
+1784 TIMER follower T1 S0 Sleeping for 323ms ms
+1788 TIMER follower T1 S4 Sleeping for 444ms ms
+1799 LEADER leader T1 S2 Sending HBs
+1799 LEADER leader T1 S2 Sent HBs
+1799 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1799 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1799 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 17
+1799 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1799 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 17
+1799 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 18 to 19
+1799 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 17
+1799 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1799 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 17
+1799 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 18 to 19
+1799 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 18! Updating commitIndex
+1799 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+1799 KV_APPLYCH K2 Sent on getCh!
+1799 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 18 to 19
+1799 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y on getCh!
+1799 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 y for key 0
+1799 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1799 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 18 to 19
+1799 CK_PUTAPPEND PutAppend successful for key=0
+1800 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1800 KV_GET K2 Waiting on getCh...
+1909 TIMER follower T1 S1 Sleeping for 264ms ms
+1921 TIMER leader T1 S2 Sleeping for 268ms ms
+1935 TIMER follower T1 S3 Sleeping for 302ms ms
+1949 LEADER leader T1 S2 Sending HBs
+1949 LEADER leader T1 S2 Sent HBs
+1949 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1949 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 18
+1949 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1949 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 18
+1949 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1949 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 18
+1950 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1950 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 18
+1950 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 19 to 21
+1950 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 19 to 21
+1950 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 20! Updating commitIndex
+1950 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y
+1950 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+1950 KV_APPLYCH K2 Sent on getCh!
+1950 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y on getCh!
+1950 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 19 to 21
+1950 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 19 to 21
+1950 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y for key 0
+1950 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+1950 KV_GET K2 Waiting on getCh...
+2099 LEADER leader T1 S2 Sending HBs
+2099 LEADER leader T1 S2 Sent HBs
+2100 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2100 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 20
+2100 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y
+2100 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2100 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 20
+2100 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y
+2100 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2100 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 20
+2100 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y
+2100 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2100 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 20
+2100 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 21 to 22
+2100 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 21 to 22
+2100 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 21! Updating commitIndex
+2100 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y
+2100 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+2100 KV_APPLYCH K2 Sent on getCh!
+2100 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y on getCh!
+2100 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 21 to 22
+2100 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 y for key 0
+2100 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 21 to 22
+2100 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2100 CK_PUTAPPEND PutAppend successful for key=0
+2100 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2100 CK_PUTAPPEND PutAppend successful for key=0
+2100 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2101 CK_PUTAPPEND PutAppend successful for key=0
+2101 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2101 KV_GET K2 Waiting on getCh...
+2108 TIMER follower T1 S0 Sleeping for 323ms ms
+2174 TIMER follower T1 S1 Sleeping for 264ms ms
+2189 TIMER leader T1 S2 Sleeping for 268ms ms
+2232 TIMER follower T1 S4 Sleeping for 444ms ms
+2237 TIMER follower T1 S3 Sleeping for 302ms ms
+2250 LEADER leader T1 S2 Sending HBs
+2250 LEADER leader T1 S2 Sent HBs
+2251 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2251 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 21
+2251 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 22 to 26
+2251 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2251 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 21
+2251 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 22 to 26
+2251 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 25! Updating commitIndex
+2251 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 y
+2251 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 y
+2251 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y
+2251 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+2251 KV_APPLYCH K2 Sent on getCh!
+2251 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y on getCh!
+2251 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y for key 0
+2251 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2251 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 21
+2251 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2251 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 25
+2251 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 y
+2251 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 y
+2251 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y
+2251 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 22 to 26
+2251 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 22 to 26
+2251 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2251 KV_GET K2 Waiting on getCh...
+2401 LEADER leader T1 S2 Sending HBs
+2401 LEADER leader T1 S2 Sent HBs
+2401 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2401 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2401 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2401 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 25
+2401 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 y
+2401 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 y
+2401 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2401 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 25
+2401 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 y
+2402 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 26 to 27
+2401 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 25
+2402 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 y
+2402 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 y
+2402 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y
+2401 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y
+2402 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 y
+2402 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y
+2402 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 26 to 27
+2402 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 26! Updating commitIndex
+2402 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 26 to 27
+2402 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+2402 KV_APPLYCH K2 Sent on getCh!
+2402 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y on getCh!
+2402 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 26 to 27
+2402 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 y for key 0
+2402 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2402 CK_PUTAPPEND PutAppend successful for key=0
+2402 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2402 CK_PUTAPPEND PutAppend successful for key=0
+2402 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2402 KV_GET K2 Waiting on getCh...
+2431 TIMER follower T1 S0 Sleeping for 323ms ms
+2439 TIMER follower T1 S1 Sleeping for 264ms ms
+2458 TIMER leader T1 S2 Sleeping for 268ms ms
+2540 TIMER follower T1 S3 Sleeping for 302ms ms
+2552 LEADER leader T1 S2 Sending HBs
+2553 LEADER leader T1 S2 Sent HBs
+2553 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2553 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 26
+2553 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2553 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 26
+2553 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2553 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 26
+2553 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 27 to 30
+2553 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2553 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 26
+2553 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 27 to 30
+2553 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 29! Updating commitIndex
+2553 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 y
+2553 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 y
+2553 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+2553 KV_APPLYCH K2 Sent on getCh!
+2553 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 27 to 30
+2553 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 y on getCh!
+2553 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 27 to 30
+2553 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 y for key 0
+2553 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2553 CK_PUTAPPEND PutAppend successful for key=0
+2553 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2553 CK_PUTAPPEND PutAppend successful for key=0
+2554 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2554 CK_PUTAPPEND PutAppend successful for key=0
+2554 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2554 KV_GET K2 Waiting on getCh...
+2678 TIMER follower T1 S4 Sleeping for 444ms ms
+2703 TIMER follower T1 S1 Sleeping for 264ms ms
+2703 LEADER leader T1 S2 Sending HBs
+2703 LEADER leader T1 S2 Sent HBs
+2704 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2704 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 29
+2704 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2704 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 29
+2704 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2704 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 29
+2704 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 y
+2704 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 y
+2704 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 y
+2704 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 y
+2704 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 y
+2704 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 30 to 34
+2704 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2704 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 y
+2704 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 29
+2704 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 y
+2704 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 y
+2704 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 30 to 34
+2704 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 33! Updating commitIndex
+2704 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 30 to 34
+2704 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 y
+2704 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 y
+2704 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y
+2704 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 30 to 34
+2704 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+2704 KV_APPLYCH K2 Sent on getCh!
+2704 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y on getCh!
+2704 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y for key 0
+2704 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2704 KV_GET K2 Waiting on getCh...
+2727 TIMER leader T1 S2 Sleeping for 268ms ms
+2755 TIMER follower T1 S0 Sleeping for 323ms ms
+2842 TIMER follower T1 S3 Sleeping for 302ms ms
+2855 LEADER leader T1 S2 Sending HBs
+2855 LEADER leader T1 S2 Sent HBs
+2855 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2855 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 33
+2855 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2855 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 33
+2855 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 y
+2855 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 y
+2855 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2855 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2855 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 33
+2855 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 y
+2855 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 y
+2855 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 y
+2855 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 y
+2855 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y
+2855 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y
+2855 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 33
+2855 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 y
+2855 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 y
+2855 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y
+2855 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 34 to 35
+2855 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 34 to 35
+2855 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y
+2855 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 34! Updating commitIndex
+2855 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+2855 KV_APPLYCH K2 Sent on getCh!
+2855 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y on getCh!
+2855 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 y for key 0
+2855 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 34 to 35
+2855 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 34 to 35
+2856 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2856 CK_PUTAPPEND PutAppend successful for key=0
+2856 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+2856 KV_GET K2 Waiting on getCh...
+2968 TIMER follower T1 S1 Sleeping for 264ms ms
+2996 TIMER leader T1 S2 Sleeping for 268ms ms
+3006 LEADER leader T1 S2 Sending HBs
+3006 LEADER leader T1 S2 Sent HBs
+3006 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3006 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 34
+3006 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3006 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 34
+3006 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3006 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 34
+3006 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 35 to 37
+3006 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3006 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 34
+3006 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 35 to 37
+3006 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 36! Updating commitIndex
+3006 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y
+3006 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+3006 KV_APPLYCH K2 Sent on getCh!
+3006 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y on getCh!
+3006 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y for key 0
+3007 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 35 to 37
+3006 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 35 to 37
+3007 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3007 KV_GET K2 Waiting on getCh...
+3080 TIMER follower T1 S0 Sleeping for 323ms ms
+3122 TIMER follower T1 S4 Sleeping for 444ms ms
+3145 TIMER follower T1 S3 Sleeping for 302ms ms
+3156 LEADER leader T1 S2 Sending HBs
+3157 LEADER leader T1 S2 Sent HBs
+3157 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3157 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3157 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3157 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 36
+3157 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y
+3157 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 36
+3157 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y
+3157 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3157 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 37 to 38
+3157 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 36
+3157 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y
+3157 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 36
+3157 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 37 to 38
+3157 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 37! Updating commitIndex
+3157 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y
+3157 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+3157 KV_APPLYCH K2 Sent on getCh!
+3157 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y on getCh!
+3157 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 37 to 38
+3157 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 y for key 0
+3157 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 37 to 38
+3157 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3157 CK_PUTAPPEND PutAppend successful for key=0
+3158 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3158 KV_GET K2 Waiting on getCh...
+3233 TIMER follower T1 S1 Sleeping for 264ms ms
+3265 TIMER leader T1 S2 Sleeping for 268ms ms
+3307 LEADER leader T1 S2 Sending HBs
+3307 LEADER leader T1 S2 Sent HBs
+3307 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3307 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3308 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 37
+3307 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 37
+3307 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3308 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3308 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 37
+3308 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 38 to 40
+3308 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 37
+3308 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 38 to 40
+3308 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 39! Updating commitIndex
+3308 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y
+3308 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+3308 KV_APPLYCH K2 Sent on getCh!
+3308 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y on getCh!
+3308 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 38 to 40
+3308 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 38 to 40
+3308 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y for key 0
+3308 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3308 KV_GET K2 Waiting on getCh...
+3404 TIMER follower T1 S0 Sleeping for 323ms ms
+3447 TIMER follower T1 S3 Sleeping for 302ms ms
+3458 LEADER leader T1 S2 Sending HBs
+3459 LEADER leader T1 S2 Sent HBs
+3459 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3459 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 39
+3459 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3459 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 39
+3459 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y
+3459 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3459 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 39
+3459 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y
+3459 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3459 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 40 to 41
+3459 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 39
+3459 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y
+3459 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y
+3459 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 40 to 41
+3459 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 40! Updating commitIndex
+3459 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+3459 KV_APPLYCH K2 Sent on getCh!
+3459 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 40 to 41
+3459 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y on getCh!
+3459 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 40 to 41
+3459 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y for key 0
+3459 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3459 KV_GET K2 Waiting on getCh...
+3498 TIMER follower T1 S1 Sleeping for 264ms ms
+3533 TIMER leader T1 S2 Sleeping for 268ms ms
+3567 TIMER follower T1 S4 Sleeping for 444ms ms
+3609 LEADER leader T1 S2 Sending HBs
+3609 LEADER leader T1 S2 Sent HBs
+3609 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3609 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 40
+3609 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3609 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 40
+3609 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3609 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 40
+3609 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3609 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 40
+3609 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 41 to 42
+3609 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 41 to 42
+3609 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 41! Updating commitIndex
+3609 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+3609 KV_APPLYCH K2 Sent on getCh!
+3609 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y on getCh!
+3609 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 41 to 42
+3609 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 41 to 42
+3609 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y for key 0
+3610 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3610 KV_GET K2 Waiting on getCh...
+3727 TIMER follower T1 S0 Sleeping for 323ms ms
+3750 TIMER follower T1 S3 Sleeping for 302ms ms
+3759 LEADER leader T1 S2 Sending HBs
+3759 LEADER leader T1 S2 Sent HBs
+3759 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3759 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 41
+3759 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3760 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 41
+3760 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3760 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 41
+3760 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 42 to 43
+3759 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3760 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 41
+3760 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 42 to 43
+3760 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 42! Updating commitIndex
+3760 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+3760 KV_APPLYCH K2 Sent on getCh!
+3760 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y on getCh!
+3761 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 42 to 43
+3761 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 42 to 43
+3761 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 y for key 0
+3761 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3761 CK_PUTAPPEND PutAppend successful for key=0
+3761 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3761 CK_PUTAPPEND PutAppend successful for key=0
+3761 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3761 CK_PUTAPPEND PutAppend successful for key=0
+3761 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3761 KV_GET K2 Waiting on getCh...
+3763 TIMER follower T1 S1 Sleeping for 264ms ms
+3802 TIMER leader T1 S2 Sleeping for 268ms ms
+3910 LEADER leader T1 S2 Sending HBs
+3910 LEADER leader T1 S2 Sent HBs
+3910 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3910 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 42
+3910 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3911 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 42
+3911 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 43 to 47
+3910 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3911 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 42
+3911 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 43 to 47
+3911 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 46! Updating commitIndex
+3911 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 y
+3911 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 y
+3911 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y
+3911 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+3911 KV_APPLYCH K2 Sent on getCh!
+3911 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 43 to 47
+3911 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y on getCh!
+3910 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3911 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 42
+3911 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y for key 0
+3911 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 43 to 47
+3911 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+3911 KV_GET K2 Waiting on getCh...
+4012 TIMER follower T1 S4 Sleeping for 444ms ms
+4028 TIMER follower T1 S1 Sleeping for 264ms ms
+4050 TIMER follower T1 S0 Sleeping for 323ms ms
+4052 TIMER follower T1 S3 Sleeping for 302ms ms
+4060 LEADER leader T1 S2 Sending HBs
+4061 LEADER leader T1 S2 Sent HBs
+4061 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4061 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4061 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 46
+4061 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 y
+4061 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 y
+4061 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y
+4061 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 46
+4061 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 y
+4061 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 y
+4061 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y
+4061 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4061 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 46
+4061 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 y
+4061 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 y
+4061 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y
+4061 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4061 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 46
+4061 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 47 to 48
+4061 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 y
+4061 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 y
+4061 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y
+4061 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 47 to 48
+4061 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 47! Updating commitIndex
+4061 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+4061 KV_APPLYCH K2 Sent on getCh!
+4061 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 47 to 48
+4061 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y on getCh!
+4061 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 47 to 48
+4061 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y for key 0
+4062 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4062 KV_GET K2 Waiting on getCh...
+4070 TIMER leader T1 S2 Sleeping for 268ms ms
+4212 LEADER leader T1 S2 Sending HBs
+4212 LEADER leader T1 S2 Sent HBs
+4212 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4212 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 47
+4212 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4212 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4212 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 47
+4212 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4212 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 47
+4212 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 47
+4212 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 48 to 49
+4212 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 48 to 49
+4212 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 48! Updating commitIndex
+4212 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+4212 KV_APPLYCH K2 Sent on getCh!
+4212 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y on getCh!
+4212 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 48 to 49
+4212 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 y for key 0
+4212 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 48 to 49
+4213 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4213 CK_PUTAPPEND PutAppend successful for key=0
+4213 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4213 CK_PUTAPPEND PutAppend successful for key=0
+4213 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4213 KV_GET K2 Waiting on getCh...
+4293 TIMER follower T1 S1 Sleeping for 264ms ms
+4339 TIMER leader T1 S2 Sleeping for 268ms ms
+4354 TIMER follower T1 S3 Sleeping for 302ms ms
+4362 LEADER leader T1 S2 Sending HBs
+4362 LEADER leader T1 S2 Sent HBs
+4362 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4362 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4362 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4362 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 48
+4362 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 48
+4363 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 49 to 52
+4362 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4363 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 48
+4362 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 48
+4363 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 49 to 52
+4363 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 51! Updating commitIndex
+4363 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 y
+4363 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 y
+4363 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+4363 KV_APPLYCH K2 Sent on getCh!
+4363 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 y on getCh!
+4363 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 49 to 52
+4363 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 49 to 52
+4363 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 y for key 0
+4363 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4363 CK_PUTAPPEND PutAppend successful for key=0
+4363 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4363 KV_GET K2 Waiting on getCh...
+4374 TIMER follower T1 S0 Sleeping for 323ms ms
+4457 TIMER follower T1 S4 Sleeping for 444ms ms
+4513 LEADER leader T1 S2 Sending HBs
+4513 LEADER leader T1 S2 Sent HBs
+4513 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4513 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 51
+4513 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4513 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4513 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 51
+4513 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 y
+4513 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 y
+4513 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 51
+4513 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 y
+4513 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 y
+4513 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 y
+4513 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4513 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 51
+4513 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 y
+4513 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 y
+4513 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 52 to 54
+4513 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 y
+4513 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 52 to 54
+4513 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 53! Updating commitIndex
+4513 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y
+4513 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+4513 KV_APPLYCH K2 Sent on getCh!
+4513 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y on getCh!
+4513 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 52 to 54
+4513 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 52 to 54
+4513 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y for key 0
+4514 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4514 KV_GET K2 Waiting on getCh...
+4557 TIMER follower T1 S1 Sleeping for 264ms ms
+4608 TIMER leader T1 S2 Sleeping for 268ms ms
+4657 TIMER follower T1 S3 Sleeping for 302ms ms
+4663 LEADER leader T1 S2 Sending HBs
+4663 LEADER leader T1 S2 Sent HBs
+4664 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4664 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4664 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 53
+4664 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y
+4664 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4664 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 53
+4664 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y
+4664 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 53
+4664 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 54 to 55
+4664 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4664 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y
+4664 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 53
+4664 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y
+4664 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 54 to 55
+4664 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 54! Updating commitIndex
+4664 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 54 to 55
+4664 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+4664 KV_APPLYCH K2 Sent on getCh!
+4664 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y on getCh!
+4664 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 54 to 55
+4664 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y for key 0
+4664 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4664 KV_GET K2 Waiting on getCh...
+4698 TIMER follower T1 S0 Sleeping for 323ms ms
+4815 LEADER leader T1 S2 Sending HBs
+4815 LEADER leader T1 S2 Sent HBs
+4815 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4815 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 54
+4815 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4815 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 54
+4815 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4815 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 54
+4815 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4815 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 55 to 56
+4815 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 54
+4815 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 55 to 56
+4815 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 55! Updating commitIndex
+4815 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+4815 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 55 to 56
+4815 KV_APPLYCH K2 Sent on getCh!
+4815 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y on getCh!
+4815 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y for key 0
+4815 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 55 to 56
+4816 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4816 KV_GET K2 Waiting on getCh...
+4823 TIMER follower T1 S1 Sleeping for 264ms ms
+4877 TIMER leader T1 S2 Sleeping for 268ms ms
+4902 TIMER follower T1 S4 Sleeping for 444ms ms
+4960 TIMER follower T1 S3 Sleeping for 302ms ms
+4966 LEADER leader T1 S2 Sending HBs
+4966 LEADER leader T1 S2 Sent HBs
+4966 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4966 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 55
+4966 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4966 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 55
+4966 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 56 to 57
+4966 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4966 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 55
+4966 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4966 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 55
+4966 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 56 to 57
+4966 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 56! Updating commitIndex
+4966 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+4966 KV_APPLYCH K2 Sent on getCh!
+4966 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y on getCh!
+4966 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 y for key 0
+4966 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 56 to 57
+4966 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 56 to 57
+4966 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4966 CK_PUTAPPEND PutAppend successful for key=0
+4966 LOG_ENTRIES leader T1 S2 Appended new entry to self. New logEntries is [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+4966 KV_GET K2 Waiting on getCh...
+5021 TIMER follower T1 S0 Sleeping for 323ms ms
+5088 TIMER follower T1 S1 Sleeping for 264ms ms
+5117 LEADER leader T1 S2 Sending HBs
+5117 LEADER leader T1 S2 Sent HBs
+5117 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5117 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 56
+5117 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5117 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 56
+5117 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5117 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 56
+5117 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5117 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 56
+5117 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 57 to 59
+5117 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 57 to 59
+5117 COMMIT_UPDATE leader T1 S2 Found a higherCommitIndex as 58! Updating commitIndex
+5118 KV_APPLYCH K2 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 y
+5118 KV_APPLYCH K2 Op is obviously GetVal, so sending on getCh
+5118 KV_APPLYCH K2 Sent on getCh!
+5118 KV_GET K2 Received x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 y on getCh!
+5117 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 57 to 59
+5118 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 57 to 59
+5118 CK_GET Found value x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 y for key 0
+5118 KV_GET K0 Waiting on getCh...
+5145 TIMER leader T1 S2 Sleeping for 268ms ms
+5263 TIMER follower T1 S3 Sleeping for 302ms ms
+5268 LEADER leader T1 S2 Sending HBs
+5268 LEADER leader T1 S2 Sent HBs
+5268 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5268 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5268 COMMIT_UPDATE follower T1 S0 Updating commitIndex to 58
+5268 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5268 COMMIT_UPDATE follower T1 S3 Updating commitIndex to 58
+5268 KV_APPLYCH K3 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 y
+5268 COMMIT_UPDATE follower T1 S4 Updating commitIndex to 58
+5268 KV_APPLYCH K4 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 y
+5268 KV_APPLYCH K0 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 y
+5268 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5269 COMMIT_UPDATE follower T1 S1 Updating commitIndex to 58
+5269 KV_APPLYCH K1 Append value to key 0. New value is x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 y
+5269 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+5269 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+5269 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+5269 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+5344 TIMER follower T1 S0 Sleeping for 323ms ms
+5347 TIMER follower T1 S4 Sleeping for 444ms ms
+5353 TIMER follower T1 S1 Sleeping for 264ms ms
+5414 TIMER leader T1 S2 Sleeping for 268ms ms
+5419 LEADER leader T1 S2 Sending HBs
+5419 LEADER leader T1 S2 Sent HBs
+5420 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5420 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5420 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5420 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5420 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+5420 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+5420 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+5420 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+5566 TIMER follower T1 S3 Sleeping for 302ms ms
+5570 LEADER leader T1 S2 Sending HBs
+5570 LEADER leader T1 S2 Sent HBs
+5570 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5570 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5570 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5570 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+5570 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5570 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+5570 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+5571 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+5618 TIMER follower T1 S1 Sleeping for 264ms ms
+5667 TIMER follower T1 S0 Sleeping for 323ms ms
+5682 TIMER leader T1 S2 Sleeping for 268ms ms
+5721 LEADER leader T1 S2 Sending HBs
+5721 LEADER leader T1 S2 Sent HBs
+5721 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5721 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5721 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5721 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+5721 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5721 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+5721 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+5721 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+5791 TIMER follower T1 S4 Sleeping for 444ms ms
+5869 TIMER follower T1 S3 Sleeping for 302ms ms
+5872 LEADER leader T1 S2 Sending HBs
+5872 LEADER leader T1 S2 Sent HBs
+5872 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5872 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5872 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5872 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+5872 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+5872 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+5872 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+5872 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+5883 TIMER follower T1 S1 Sleeping for 264ms ms
+5951 TIMER leader T1 S2 Sleeping for 268ms ms
+5991 TIMER follower T1 S0 Sleeping for 323ms ms
+6023 LEADER leader T1 S2 Sending HBs
+6023 LEADER leader T1 S2 Sent HBs
+6023 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6023 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6023 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6023 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+6023 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+6023 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6023 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+6023 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+6147 TIMER follower T1 S1 Sleeping for 264ms ms
+6172 TIMER follower T1 S3 Sleeping for 302ms ms
+6173 LEADER leader T1 S2 Sending HBs
+6173 LEADER leader T1 S2 Sent HBs
+6173 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6173 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6173 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6174 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+6173 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6174 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+6174 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+6174 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+6220 TIMER leader T1 S2 Sleeping for 268ms ms
+6236 TIMER follower T1 S4 Sleeping for 444ms ms
+6315 TIMER follower T1 S0 Sleeping for 323ms ms
+6324 LEADER leader T1 S2 Sending HBs
+6324 LEADER leader T1 S2 Sent HBs
+6325 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6325 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6325 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6325 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+6325 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+6325 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6325 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+6325 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+6412 TIMER follower T1 S1 Sleeping for 264ms ms
+6474 TIMER follower T1 S3 Sleeping for 302ms ms
+6475 LEADER leader T1 S2 Sending HBs
+6475 LEADER leader T1 S2 Sent HBs
+6475 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6475 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6475 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6476 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+6475 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+6475 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6476 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+6476 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+6488 TIMER leader T1 S2 Sleeping for 268ms ms
+6626 LEADER leader T1 S2 Sending HBs
+6626 LEADER leader T1 S2 Sent HBs
+6626 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6626 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6626 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6627 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+6627 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+6626 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6627 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+6627 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+6639 TIMER follower T1 S0 Sleeping for 323ms ms
+6676 TIMER follower T1 S1 Sleeping for 264ms ms
+6681 TIMER follower T1 S4 Sleeping for 444ms ms
+6757 TIMER leader T1 S2 Sleeping for 268ms ms
+6777 TIMER follower T1 S3 Sleeping for 302ms ms
+6777 LEADER leader T1 S2 Sending HBs
+6777 LEADER leader T1 S2 Sent HBs
+6777 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6777 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6777 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6777 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6777 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+6777 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+6777 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+6777 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+6928 LEADER leader T1 S2 Sending HBs
+6928 LEADER leader T1 S2 Sent HBs
+6928 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6928 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6929 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+6928 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6929 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+6929 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+6929 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+6929 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+6941 TIMER follower T1 S1 Sleeping for 264ms ms
+6962 TIMER follower T1 S0 Sleeping for 323ms ms
+7026 TIMER leader T1 S2 Sleeping for 268ms ms
+7078 LEADER leader T1 S2 Sending HBs
+7079 LEADER leader T1 S2 Sent HBs
+7079 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7079 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7079 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7079 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+7079 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+7079 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7079 TIMER follower T1 S3 Sleeping for 302ms ms
+7079 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+7079 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+7125 TIMER follower T1 S4 Sleeping for 444ms ms
+7205 TIMER follower T1 S1 Sleeping for 264ms ms
+7229 LEADER leader T1 S2 Sending HBs
+7229 LEADER leader T1 S2 Sent HBs
+7229 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7229 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7229 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7229 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+7229 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7229 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+7230 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+7230 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+7286 TIMER follower T1 S0 Sleeping for 323ms ms
+7295 TIMER leader T1 S2 Sleeping for 268ms ms
+7380 LEADER leader T1 S2 Sending HBs
+7380 LEADER leader T1 S2 Sent HBs
+7380 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7380 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7380 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7380 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+7380 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7380 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+7380 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+7380 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+7382 TIMER follower T1 S3 Sleeping for 302ms ms
+7470 TIMER follower T1 S1 Sleeping for 264ms ms
+7530 LEADER leader T1 S2 Sending HBs
+7531 LEADER leader T1 S2 Sent HBs
+7531 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7531 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7531 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7531 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7531 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+7531 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+7531 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+7531 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+7563 TIMER leader T1 S2 Sleeping for 268ms ms
+7570 TIMER follower T1 S4 Sleeping for 444ms ms
+7610 TIMER follower T1 S0 Sleeping for 323ms ms
+7681 LEADER leader T1 S2 Sending HBs
+7681 LEADER leader T1 S2 Sent HBs
+7681 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7681 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7682 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7682 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+7682 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7682 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+7682 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+7682 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+7685 TIMER follower T1 S3 Sleeping for 302ms ms
+7735 TIMER follower T1 S1 Sleeping for 264ms ms
+7831 LEADER leader T1 S2 Sending HBs
+7832 TIMER leader T1 S2 Sleeping for 268ms ms
+7832 LEADER leader T1 S2 Sent HBs
+7832 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7832 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7832 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+7832 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7832 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+7832 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7832 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+7832 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+7933 TIMER follower T1 S0 Sleeping for 323ms ms
+7982 LEADER leader T1 S2 Sending HBs
+7982 LEADER leader T1 S2 Sent HBs
+7982 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7982 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7982 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7982 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+7982 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+7982 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+7982 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+7982 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+7987 TIMER follower T1 S3 Sleeping for 302ms ms
+7999 TIMER follower T1 S1 Sleeping for 264ms ms
+8014 TIMER follower T1 S4 Sleeping for 444ms ms
+8100 TIMER leader T1 S2 Sleeping for 268ms ms
+8133 LEADER leader T1 S2 Sending HBs
+8133 LEADER leader T1 S2 Sent HBs
+8133 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8133 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8133 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8134 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8134 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+8134 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+8134 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+8134 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+8257 TIMER follower T1 S0 Sleeping for 323ms ms
+8263 TIMER follower T1 S1 Sleeping for 264ms ms
+8283 LEADER leader T1 S2 Sending HBs
+8283 LEADER leader T1 S2 Sent HBs
+8283 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8283 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8283 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8283 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+8283 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+8283 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8283 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+8284 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+8290 TIMER follower T1 S3 Sleeping for 302ms ms
+8368 TIMER leader T1 S2 Sleeping for 268ms ms
+8433 LEADER leader T1 S2 Sending HBs
+8433 LEADER leader T1 S2 Sent HBs
+8434 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8434 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8434 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8434 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8434 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+8434 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+8434 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+8434 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+8459 TIMER follower T1 S4 Sleeping for 444ms ms
+8528 TIMER follower T1 S1 Sleeping for 264ms ms
+8580 TIMER follower T1 S0 Sleeping for 323ms ms
+8584 LEADER leader T1 S2 Sending HBs
+8584 LEADER leader T1 S2 Sent HBs
+8584 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8584 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+8584 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8584 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8584 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8584 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+8584 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+8584 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+8593 TIMER follower T1 S3 Sleeping for 302ms ms
+8637 TIMER leader T1 S2 Sleeping for 268ms ms
+8734 LEADER leader T1 S2 Sending HBs
+8734 LEADER leader T1 S2 Sent HBs
+8734 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8734 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8734 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8734 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+8734 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+8734 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+8734 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8735 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+8793 TIMER follower T1 S1 Sleeping for 264ms ms
+8885 LEADER leader T1 S2 Sending HBs
+8885 LEADER leader T1 S2 Sent HBs
+8885 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8885 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8885 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+8885 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8885 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+8885 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+8885 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+8885 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+8896 TIMER follower T1 S3 Sleeping for 302ms ms
+8904 TIMER follower T1 S4 Sleeping for 444ms ms
+8904 TIMER follower T1 S0 Sleeping for 323ms ms
+8906 TIMER leader T1 S2 Sleeping for 268ms ms
+9035 LEADER leader T1 S2 Sending HBs
+9035 LEADER leader T1 S2 Sent HBs
+9035 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+9035 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+9035 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+9035 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+9035 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+9035 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+9035 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+9036 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+9057 TIMER follower T1 S1 Sleeping for 264ms ms
+9175 TIMER leader T1 S2 Sleeping for 268ms ms
+9186 LEADER leader T1 S2 Sending HBs
+9186 LEADER leader T1 S2 Sent HBs
+9186 UPSERT_LOG follower T1 S1 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+9186 UPSERT_LOG follower T1 S4 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+9186 UPSERT_LOG follower T1 S3 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+9186 UPSERT_LOG follower T1 S0 Upsert finished. New logs are [(1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1); (1);] (offset: 0)
+9186 APPEND_REPLY leader T1 S2 Got a success reply! Updating S4's nextIndex from 59 to 59
+9186 APPEND_REPLY leader T1 S2 Got a success reply! Updating S1's nextIndex from 59 to 59
+9187 APPEND_REPLY leader T1 S2 Got a success reply! Updating S0's nextIndex from 59 to 59
+9187 APPEND_REPLY leader T1 S2 Got a success reply! Updating S3's nextIndex from 59 to 59
+9198 TIMER follower T1 S3 Sleeping for 302ms ms
+9228 TIMER follower T1 S0 Sleeping for 323ms ms
+signal: interrupt
+FAIL	pegasus	9.250s
