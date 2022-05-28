@@ -20,7 +20,6 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 }
 
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
-
 	command := Command{
 		Id:    kv.getId(),
 		Op:    GetVal,
@@ -32,11 +31,10 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	kv.logMsg(KV_GET, "Waiting on getCh...")
+	kv.logMsg(KV_GET, "Started agreement for get, will wait on getCh...")
 	value := <-kv.getCh
 	reply.Value = value
-	kv.logMsg(KV_GET, fmt.Sprintf("Received %v on getCh!", value))
-
+	kv.logMsg(KV_GET, "Received value on getCh, returning")
 }
 
 func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {

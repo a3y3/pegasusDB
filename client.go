@@ -39,18 +39,22 @@ func (ck *Clerk) Get(key string) string {
 	getArgs := GetArgs{
 		Key: key,
 	}
-	getReply := GetReply{}
-	ok := ck.servers[ck.currentLeader].Call("KVServer.Get", &getArgs, &getReply)
-	if ok {
-		if getReply.Err == ErrWrongLeader {
-			logMsg(CK_GET, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
-			ck.updateCurrentLeader()
+	for true {
+		getReply := GetReply{}
+		logMsg(CK_GET, fmt.Sprintf("Sending Get req for key %v to currentLeader K%v", key, ck.currentLeader))
+		ok := ck.servers[ck.currentLeader].Call("KVServer.Get", &getArgs, &getReply)
+		if ok {
+			if getReply.Err == ErrWrongLeader {
+				logMsg(CK_GET, fmt.Sprintf("Contacted wrong leader (K%v), updating leader list...", ck.currentLeader))
+				ck.updateCurrentLeader()
+			} else {
+				value := getReply.Value
+				logMsg(CK_GET, fmt.Sprintf("Found value %v for key %v!", value, key))
+				return value
+			}
+		} else {
+			logMsg(CK_GET, fmt.Sprintf("Get RPC failed to currentLeader K%v!", ck.currentLeader))
 		}
-		value := getReply.Value
-		logMsg(CK_GET, fmt.Sprintf("Found value %v for key %v", value, key))
-		return value
-	} else {
-		logMsg(CK_GET, "Get RPC failed!")
 	}
 	return ""
 }
@@ -71,19 +75,21 @@ func (ck *Clerk) PutAppend(key string, value string, op Op) {
 		Value: value,
 		Op:    op,
 	}
-	ok := false
-	for !ok {
+	for true {
 		putAppendReply := PutAppendReply{}
-		ok = ck.servers[ck.currentLeader].Call("KVServer.PutAppend", &putAppendArgs, &putAppendReply)
-		if putAppendReply.Err == ErrWrongLeader {
-			logMsg(CK_PUTAPPEND, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
-			ck.updateCurrentLeader()
-			ok = false
+		logMsg(CK_PUTAPPEND, fmt.Sprintf("Sending %v req for key %v and val %v to currentLeader K%v", op, key, value, ck.currentLeader))
+		ok := ck.servers[ck.currentLeader].Call("KVServer.PutAppend", &putAppendArgs, &putAppendReply)
+		if ok {
+			if putAppendReply.Err == ErrWrongLeader {
+				logMsg(CK_PUTAPPEND, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
+				ck.updateCurrentLeader()
+			} else {
+				logMsg(CK_PUTAPPEND, fmt.Sprintf("%v successful for key=%v", op, key))
+				return
+			}
 		} else {
-			logMsg(CK_PUTAPPEND, fmt.Sprintf("PutAppend successful for key=%v", key))
-			break
+			logMsg(CK_PUTAPPEND, "PutAppend RPC failed!")
 		}
-		logMsg(CK_PUTAPPEND, "PutAppend RPC failed!")
 	}
 }
 
