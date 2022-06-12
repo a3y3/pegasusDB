@@ -28,13 +28,6 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 // returns "" if the key does not exist.
 // keeps trying forever in the face of all other errors.
 //
-// you can send an RPC with code like this:
-// ok := ck.servers[i].Call("KVServer.Get", &args, &reply)
-//
-// the types of args and reply (including whether they are pointers)
-// must match the declared types of the RPC handler function's
-// arguments. and reply must be passed as a pointer.
-//
 func (ck *Clerk) Get(key string) string {
 	getArgs := GetArgs{
 		Key: key,
@@ -49,7 +42,7 @@ func (ck *Clerk) Get(key string) string {
 				ck.updateCurrentLeader()
 			} else {
 				value := getReply.Value
-				logMsg(CK_GET, fmt.Sprintf("Found value %v for key %v!", value, key))
+				logMsg(CK_GET, fmt.Sprintf("Returning value %v for key %v!", value, key))
 				return value
 			}
 		} else {
@@ -113,14 +106,14 @@ func (ck *Clerk) updateCurrentLeader() {
 					logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader S%v", i))
 					return
 				} else {
-					logMsg(CK_UPDATE_LEADER, fmt.Sprintf("S%v is not the leader", i))
+					logMsg(CK_UPDATE_LEADER, fmt.Sprintf("K%v is not the leader", i))
 				}
 			} else {
-				logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Failed to contact server S%v", i))
+				logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Failed to contact server K%v", i))
 			}
 		}
 		// no one claims to be a leader. Wait for a while for an election, then try again.
 		logMsg(CK_UPDATE_LEADER, "Found no leader, going to sleep...")
-		time.Sleep(time.Millisecond * LEADER_WAIT)
+		time.Sleep(time.Millisecond * time.Duration(LEADER_WAIT))
 	}
 }

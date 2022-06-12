@@ -2,22 +2,12 @@ package pegasus
 
 import (
 	"fmt"
-	"log"
 	"sync/atomic"
 
 	"6.824/labgob"
 	"6.824/labrpc"
 	"6.824/raft"
 )
-
-const Debug = false
-
-func DPrintf(format string, a ...interface{}) (n int, err error) {
-	if Debug {
-		log.Printf(format, a...)
-	}
-	return
-}
 
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 	command := Command{
@@ -31,10 +21,10 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	kv.logMsg(KV_GET, "Started agreement for get, will wait on getCh...")
-	value := <-kv.getCh
+	kv.logMsg(KV_GET, "Started agreement for get, will wait on notifyCh...")
+	value := <-kv.notifyCh
 	reply.Value = value
-	kv.logMsg(KV_GET, "Received value on getCh, returning")
+	kv.logMsg(KV_GET, "Received value on notifyCh, returning")
 }
 
 func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
@@ -50,6 +40,7 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 		reply.Err = ErrWrongLeader
 		return
 	}
+	<-kv.notifyCh
 }
 
 //
@@ -95,7 +86,7 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv.me = me
 	kv.maxraftstate = maxraftstate
 	kv.stateMachine = make(map[string]string)
-	kv.getCh = make(chan string)
+	kv.notifyCh = make(chan string)
 	kv.logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 
 	// You may need initialization code here.
@@ -123,14 +114,14 @@ func (kv *KVServer) listenOnApplyCh() {
 			prevValue := kv.stateMachine[key]
 			kv.stateMachine[key] = prevValue + value
 			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Append value to key %v. New value is %v", key, kv.stateMachine[key]))
-		} else {
-			_, isLeader := kv.rf.GetState()
-			if isLeader {
-				kv.logMsg(KV_APPLYCH, fmt.Sprintf("Op is obviously %v, so sending on getCh", operation))
-				kv.getCh <- kv.stateMachine[key]
-				kv.logMsg(KV_APPLYCH, "Sent on getCh!")
-			}
 		}
+		_, isLeader := kv.rf.GetState()
+		if isLeader {
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending on notifyCh"))
+			kv.notifyCh <- kv.stateMachine[key]
+			kv.logMsg(KV_APPLYCH, "Sent on notifyCh!")
+		}
+
 		kv.mu.Unlock()
 	}
 }

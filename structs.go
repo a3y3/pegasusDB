@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	LEADER_WAIT = 100 // wait for these many ms before requerying for a new leader.
+	LEADER_WAIT = raft.HB_WAIT_MIN // wait for these many ms before requerying for a new leader.
 )
 
 const (
@@ -38,7 +38,7 @@ type KVServer struct {
 
 	counter      int
 	stateMachine map[string]string
-	getCh        chan string
+	notifyCh     chan string
 }
 
 type Op string
