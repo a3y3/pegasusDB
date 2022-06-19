@@ -2,6 +2,8 @@ package pegasus
 
 import (
 	"fmt"
+	"log"
+	"sync"
 	"sync/atomic"
 
 	"6.824/labgob"
@@ -10,37 +12,71 @@ import (
 )
 
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
-	command := Command{
-		Id:    kv.getId(),
+	id := kv.getId()
+	command := KeyValue{
+		Id:    id,
 		Op:    GetVal,
 		Key:   args.Key,
 		Value: "",
 	}
-	_, _, isLeader := kv.rf.Start(command)
+	index, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	kv.logMsg(KV_GET, "Started agreement for get, will wait on notifyCh...")
-	value := <-kv.notifyCh
+	value := ""
+	kv.cond.L.Lock()
+	for true {
+		kv.cond.Wait()
+		if kv.lastAppliedIndex == index {
+			if kv.lastAppliedId == id {
+				value = kv.lastAppliedKeyValue.Value
+				break
+			} else {
+				// different id on this index? Something must have gone wrong, so ask the client to retry.
+				// todo return error here.
+				log.Fatalf("Not implemented!")
+			}
+		} else {
+			kv.logMsg(KV_GET, fmt.Sprintf("Expected index %v, got %v, so waiting again", index, kv.lastAppliedIndex))
+		}
+	}
+	kv.cond.L.Unlock()
 	reply.Value = value
-	kv.logMsg(KV_GET, "Received value on notifyCh, returning")
+	kv.logMsg(KV_GET, "Returning successfully!")
 }
 
 func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
-	command := Command{
-		Id:    kv.getId(),
+	id := kv.getId()
+	command := KeyValue{
+		Id:    id,
 		Op:    args.Op,
 		Key:   args.Key,
 		Value: args.Value,
 	}
 	// we're the leader! Start an agreement for this key.
-	_, _, isLeader := kv.rf.Start(command)
+	index, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	<-kv.notifyCh
+	kv.cond.L.Lock()
+	for true {
+		kv.logMsg(KV_PUTAPPEND, "Going into wait...")
+		kv.cond.Wait()
+		if kv.lastAppliedIndex == index {
+			if kv.lastAppliedId == id {
+				break
+			} else {
+				// todo return error here.
+				log.Fatalf("Not implemented!")
+			}
+		} else {
+			kv.logMsg(KV_GET, fmt.Sprintf("Expected index %v, got %v, so waiting again", index, kv.lastAppliedIndex))
+		}
+	}
+	kv.cond.L.Unlock()
+	kv.logMsg(KV_PUTAPPEND, "Returning successfully!")
 }
 
 //
@@ -79,48 +115,44 @@ func (kv *KVServer) killed() bool {
 // for any long-running work.
 //
 func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int) *KVServer {
-	// TODO call labgob.Register on structures you want
-	labgob.Register(Command{})
-	// Go's RPC library to marshall/unmarshall.
+	labgob.Register(KeyValue{})
 	kv := new(KVServer)
 	kv.me = me
 	kv.maxraftstate = maxraftstate
 	kv.stateMachine = make(map[string]string)
-	kv.notifyCh = make(chan string)
+	kv.cond = *sync.NewCond(&kv.mu)
+	kv.applyCh = make(chan raft.ApplyMsg)
 	kv.logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 
-	// You may need initialization code here.
-
-	kv.applyCh = make(chan raft.ApplyMsg)
 	go kv.listenOnApplyCh()
 	kv.rf = raft.Make(servers, me, persister, kv.applyCh)
-
-	// You may need initialization code here.
-
 	return kv
 }
 
 func (kv *KVServer) listenOnApplyCh() {
 	for applyMsg := range kv.applyCh {
+		keyValue := applyMsg.Command.(KeyValue)
+		key := keyValue.Key
+		value := keyValue.Value
+		operation := keyValue.Op
+		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Got new message on applyMsg (op %v, key %v, value %v)", operation, key, value))
 		kv.mu.Lock()
-		command := applyMsg.Command.(Command)
-		key := command.Key
-		value := command.Value
-		operation := command.Op
 		if operation == PutVal {
 			kv.stateMachine[key] = value
 			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Updated value for %v to %v", key, kv.stateMachine[key]))
 		} else if operation == AppendVal {
 			prevValue := kv.stateMachine[key]
 			kv.stateMachine[key] = prevValue + value
-			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Append value to key %v. New value is %v", key, kv.stateMachine[key]))
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Appended value to key %v. New value is %v", key, kv.stateMachine[key]))
+		} else {
+			value = kv.stateMachine[key]
 		}
-		_, isLeader := kv.rf.GetState()
-		if isLeader {
-			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending on notifyCh"))
-			kv.notifyCh <- kv.stateMachine[key]
-			kv.logMsg(KV_APPLYCH, "Sent on notifyCh!")
-		}
+
+		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending cond broadcast!"))
+		kv.lastAppliedId = keyValue.Id
+		kv.lastAppliedIndex = applyMsg.CommandIndex
+		kv.lastAppliedKeyValue.Value = value
+		kv.cond.Broadcast()
 
 		kv.mu.Unlock()
 	}

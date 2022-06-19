@@ -36,9 +36,12 @@ type KVServer struct {
 
 	maxraftstate int // snapshot if log grows this big
 
-	counter      int
-	stateMachine map[string]string
-	notifyCh     chan string
+	counter             int
+	stateMachine        map[string]string
+	cond                sync.Cond
+	lastAppliedIndex    int
+	lastAppliedId       int
+	lastAppliedKeyValue KeyValue
 }
 
 type Op string
@@ -57,9 +60,10 @@ const (
 	CK_GET           Topic = "CK_GET"
 	CK_PUTAPPEND     Topic = "CK_PUTAPPEND"
 
-	KV_SETUP   Topic = "KV_SETUP"
-	KV_APPLYCH Topic = "KV_APPLYCH"
-	KV_GET     Topic = "KV_GET"
+	KV_SETUP     Topic = "KV_SETUP"
+	KV_APPLYCH   Topic = "KV_APPLYCH"
+	KV_GET       Topic = "KV_GET"
+	KV_PUTAPPEND Topic = "KV_PUTAPPEND"
 )
 
 type Err string
@@ -92,7 +96,7 @@ type FindLeaderReply struct {
 	IsLeader bool
 }
 
-type Command struct {
+type KeyValue struct {
 	Id    int
 	Op    Op
 	Key   string
