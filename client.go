@@ -24,73 +24,43 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 }
 
 //
-// fetch the current value for a key.
-// returns "" if the key does not exist.
-// keeps trying forever in the face of all other errors.
+// shared by Get, Put and Append.
 //
-func (ck *Clerk) Get(key string) string {
-	getArgs := GetArgs{
-		Key: key,
-	}
-	for true {
-		getReply := GetReply{}
-		logMsg(CK_GET, fmt.Sprintf("Sending Get req for key %v to currentLeader K%v", key, ck.currentLeader))
-		ok := ck.servers[ck.currentLeader].Call("KVServer.Get", &getArgs, &getReply)
-		if ok {
-			if getReply.Err == ErrWrongLeader {
-				logMsg(CK_GET, fmt.Sprintf("Contacted wrong leader (K%v), updating leader list...", ck.currentLeader))
-				ck.updateCurrentLeader()
-			} else {
-				value := getReply.Value
-				logMsg(CK_GET, fmt.Sprintf("Returning value %v for key %v!", value, key))
-				return value
-			}
-		} else {
-			logMsg(CK_GET, fmt.Sprintf("Get RPC failed to currentLeader K%v!", ck.currentLeader))
-		}
-	}
-	return ""
-}
-
-//
-// shared by Put and Append.
-//
-// you can send an RPC with code like this:
-// ok := ck.servers[i].Call("KVServer.PutAppend", &args, &reply)
-//
-// the types of args and reply (including whether they are pointers)
-// must match the declared types of the RPC handler function's
-// arguments. and reply must be passed as a pointer.
-//
-func (ck *Clerk) PutAppend(key string, value string, op Op) {
-	putAppendArgs := PutAppendArgs{
+func (ck *Clerk) GetPutAppend(key string, value string, op Op) string {
+	opArgs := OpArgs{
 		Key:   key,
 		Value: value,
 		Op:    op,
 	}
 	for true {
-		putAppendReply := PutAppendReply{}
-		logMsg(CK_PUTAPPEND, fmt.Sprintf("Sending %v req for key %v and val %v to currentLeader K%v", op, key, value, ck.currentLeader))
-		ok := ck.servers[ck.currentLeader].Call("KVServer.PutAppend", &putAppendArgs, &putAppendReply)
+		opReply := OpReply{}
+		logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Sending %v req for key %v and val %v to currentLeader", op, key, value))
+		ok := ck.servers[ck.currentLeader].Call("KVServer.AddRaftOp", &opArgs, &opReply)
 		if ok {
-			if putAppendReply.Err == ErrWrongLeader {
-				logMsg(CK_PUTAPPEND, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
+			if opReply.Err == ErrWrongLeader {
+				logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
 				ck.updateCurrentLeader()
 			} else {
-				logMsg(CK_PUTAPPEND, fmt.Sprintf("%v successful for key=%v", op, key))
-				return
+				value := opReply.Value
+				logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Returning value %v for key %v!", value, key))
+				return value
 			}
 		} else {
-			logMsg(CK_PUTAPPEND, "PutAppend RPC failed!")
+			logMsg(CK_GETPUTAPPEND, "PutAppend RPC failed!")
 		}
 	}
+	return ""
+}
+
+func (ck *Clerk) Get(key string) string {
+	return ck.GetPutAppend(key, "", GetVal)
 }
 
 func (ck *Clerk) Put(key string, value string) {
-	ck.PutAppend(key, value, PutVal)
+	ck.GetPutAppend(key, value, PutVal)
 }
 func (ck *Clerk) Append(key string, value string) {
-	ck.PutAppend(key, value, AppendVal)
+	ck.GetPutAppend(key, value, AppendVal)
 }
 
 func (ck *Clerk) updateCurrentLeader() {

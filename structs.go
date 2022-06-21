@@ -59,8 +59,7 @@ type Topic string
 const (
 	CK_SETUP         Topic = "CK_SETUP"
 	CK_UPDATE_LEADER Topic = "CK_UPDATE_LEADER"
-	CK_GET           Topic = "CK_GET"
-	CK_PUTAPPEND     Topic = "CK_PUTAPPEND"
+	CK_GETPUTAPPEND  Topic = "CK_GETPUTAPPEND"
 
 	KV_SETUP     Topic = "KV_SETUP"
 	KV_APPLYCH   Topic = "KV_APPLYCH"
@@ -70,27 +69,15 @@ const (
 
 type Err string
 
-type PutAppendArgs struct {
+type OpArgs struct {
 	Key   string
 	Value string
 	Op    Op
-	// You'll have to add definitions here.
-	// Field names must start with capital letters,
-	// otherwise RPC will break.
 }
 
-type PutAppendReply struct {
-	Err Err
-}
-
-type GetArgs struct {
-	Key string
-	// You'll have to add definitions here.
-}
-
-type GetReply struct {
+type OpReply struct {
 	Err   Err
-	Value string
+	Value string // used if Op is get
 }
 
 type FindLeaderArgs struct{}

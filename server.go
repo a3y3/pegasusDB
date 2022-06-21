@@ -11,40 +11,7 @@ import (
 	"6.824/raft"
 )
 
-func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
-	id := kv.getId()
-	command := KeyValue{
-		Id:    id,
-		Op:    GetVal,
-		Key:   args.Key,
-		Value: "",
-	}
-	index, _, isLeader := kv.rf.Start(command)
-	if !isLeader {
-		reply.Err = ErrWrongLeader
-		return
-	}
-	value := ""
-	kv.logMsg(KV_GET, fmt.Sprintf("Sent command with id %v, will wait for index %v!", id, index))
-	kv.consumerCond.L.Lock()
-	for kv.lastAppliedIndex != index {
-		kv.logMsg(KV_GET, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
-		kv.consumerCond.Wait()
-	}
-	kv.logMsg(KV_GET, fmt.Sprintf("Found nmy expected index %v! Signaling producer...", index))
-	kv.consumed = true
-	kv.producerCond.Signal()
-	if kv.lastAppliedId != id {
-		// todo return error here.
-		log.Fatalf("Not implemented!")
-	}
-	value = kv.lastAppliedKeyValue.Value
-	kv.consumerCond.L.Unlock()
-	reply.Value = value
-	kv.logMsg(KV_GET, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
-}
-
-func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
+func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	id := kv.getId()
 	command := KeyValue{
 		Id:    id,
@@ -52,28 +19,33 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 		Key:   args.Key,
 		Value: args.Value,
 	}
-	// we're the leader! Start an agreement for this key.
 	index, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Sent command with id %v, will wait for index %v!", id, index))
-
+	var topic Topic
+	if args.Op == GetVal {
+		topic = KV_GET
+	} else {
+		topic = KV_PUTAPPEND
+	}
+	kv.logMsg(topic, fmt.Sprintf("Sent command with id %v, will wait for index %v!", id, index))
 	kv.consumerCond.L.Lock()
 	for kv.lastAppliedIndex != index {
-		kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
+		kv.logMsg(topic, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
 		kv.consumerCond.Wait()
 	}
-	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Found nmy expected index %v! Signaling producer...", index))
+	kv.logMsg(topic, fmt.Sprintf("Found my expected index %v! Signaling producer...", index))
 	kv.consumed = true
 	kv.producerCond.Signal()
 	if kv.lastAppliedId != id {
 		// todo return error here.
 		log.Fatalf("Not implemented!")
 	}
+	reply.Value = kv.lastAppliedKeyValue.Value
 	kv.consumerCond.L.Unlock()
-	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
+	kv.logMsg(topic, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
 }
 
 //
