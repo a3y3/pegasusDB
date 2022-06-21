@@ -38,7 +38,9 @@ type KVServer struct {
 
 	counter             int
 	stateMachine        map[string]string
-	cond                sync.Cond
+	consumerCond        sync.Cond
+	producerCond        sync.Cond
+	consumed            bool
 	lastAppliedIndex    int
 	lastAppliedId       int
 	lastAppliedKeyValue KeyValue

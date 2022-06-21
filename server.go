@@ -25,25 +25,23 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		return
 	}
 	value := ""
-	kv.cond.L.Lock()
-	for true {
-		kv.cond.Wait()
-		if kv.lastAppliedIndex == index {
-			if kv.lastAppliedId == id {
-				value = kv.lastAppliedKeyValue.Value
-				break
-			} else {
-				// different id on this index? Something must have gone wrong, so ask the client to retry.
-				// todo return error here.
-				log.Fatalf("Not implemented!")
-			}
-		} else {
-			kv.logMsg(KV_GET, fmt.Sprintf("Expected index %v, got %v, so waiting again", index, kv.lastAppliedIndex))
-		}
+	kv.logMsg(KV_GET, fmt.Sprintf("Sent command with id %v, will wait for index %v!", id, index))
+	kv.consumerCond.L.Lock()
+	for kv.lastAppliedIndex != index {
+		kv.logMsg(KV_GET, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
+		kv.consumerCond.Wait()
 	}
-	kv.cond.L.Unlock()
+	kv.logMsg(KV_GET, fmt.Sprintf("Found nmy expected index %v! Signaling producer...", index))
+	kv.consumed = true
+	kv.producerCond.Signal()
+	if kv.lastAppliedId != id {
+		// todo return error here.
+		log.Fatalf("Not implemented!")
+	}
+	value = kv.lastAppliedKeyValue.Value
+	kv.consumerCond.L.Unlock()
 	reply.Value = value
-	kv.logMsg(KV_GET, "Returning successfully!")
+	kv.logMsg(KV_GET, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
 }
 
 func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
@@ -60,23 +58,22 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	kv.cond.L.Lock()
-	for true {
-		kv.logMsg(KV_PUTAPPEND, "Going into wait...")
-		kv.cond.Wait()
-		if kv.lastAppliedIndex == index {
-			if kv.lastAppliedId == id {
-				break
-			} else {
-				// todo return error here.
-				log.Fatalf("Not implemented!")
-			}
-		} else {
-			kv.logMsg(KV_GET, fmt.Sprintf("Expected index %v, got %v, so waiting again", index, kv.lastAppliedIndex))
-		}
+	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Sent command with id %v, will wait for index %v!", id, index))
+
+	kv.consumerCond.L.Lock()
+	for kv.lastAppliedIndex != index {
+		kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
+		kv.consumerCond.Wait()
 	}
-	kv.cond.L.Unlock()
-	kv.logMsg(KV_PUTAPPEND, "Returning successfully!")
+	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Found nmy expected index %v! Signaling producer...", index))
+	kv.consumed = true
+	kv.producerCond.Signal()
+	if kv.lastAppliedId != id {
+		// todo return error here.
+		log.Fatalf("Not implemented!")
+	}
+	kv.consumerCond.L.Unlock()
+	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
 }
 
 //
@@ -120,8 +117,10 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv.me = me
 	kv.maxraftstate = maxraftstate
 	kv.stateMachine = make(map[string]string)
-	kv.cond = *sync.NewCond(&kv.mu)
+	kv.consumerCond = *sync.NewCond(&kv.mu)
+	kv.producerCond = *sync.NewCond(&kv.mu)
 	kv.applyCh = make(chan raft.ApplyMsg)
+	kv.consumed = true
 	kv.logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 
 	go kv.listenOnApplyCh()
@@ -135,7 +134,7 @@ func (kv *KVServer) listenOnApplyCh() {
 		key := keyValue.Key
 		value := keyValue.Value
 		operation := keyValue.Op
-		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Got new message on applyMsg (op %v, key %v, value %v)", operation, key, value))
+		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Got new message on applyMsg %v (index %v)", applyMsg.Command, applyMsg.CommandIndex))
 		kv.mu.Lock()
 		if operation == PutVal {
 			kv.stateMachine[key] = value
@@ -147,12 +146,19 @@ func (kv *KVServer) listenOnApplyCh() {
 		} else {
 			value = kv.stateMachine[key]
 		}
-
-		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending cond broadcast!"))
-		kv.lastAppliedId = keyValue.Id
-		kv.lastAppliedIndex = applyMsg.CommandIndex
-		kv.lastAppliedKeyValue.Value = value
-		kv.cond.Broadcast()
+		_, isLeader := kv.rf.GetState()
+		if isLeader {
+			for !kv.consumed {
+				kv.producerCond.Wait()
+			}
+			kv.consumed = false
+			kv.lastAppliedId = keyValue.Id
+			kv.lastAppliedIndex = applyMsg.CommandIndex
+			kv.lastAppliedKeyValue.Key = key
+			kv.lastAppliedKeyValue.Value = value
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending consumer broadcast!"))
+			kv.consumerCond.Broadcast()
+		}
 
 		kv.mu.Unlock()
 	}
