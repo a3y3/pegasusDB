@@ -2,6 +2,8 @@ package pegasus
 
 import (
 	"fmt"
+	"log"
+	"sync"
 	"sync/atomic"
 
 	"6.824/labgob"
@@ -10,37 +12,68 @@ import (
 )
 
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
-	command := Command{
-		Id:    kv.getId(),
+	id := kv.getId()
+	command := KeyValue{
+		Id:    id,
 		Op:    GetVal,
 		Key:   args.Key,
 		Value: "",
 	}
-	_, _, isLeader := kv.rf.Start(command)
+	index, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	kv.logMsg(KV_GET, "Started agreement for get, will wait on notifyCh...")
-	value := <-kv.notifyCh
+	value := ""
+	kv.logMsg(KV_GET, fmt.Sprintf("Sent command with id %v, will wait for index %v!", id, index))
+	kv.consumerCond.L.Lock()
+	for kv.lastAppliedIndex != index {
+		kv.logMsg(KV_GET, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
+		kv.consumerCond.Wait()
+	}
+	kv.logMsg(KV_GET, fmt.Sprintf("Found nmy expected index %v! Signaling producer...", index))
+	kv.consumed = true
+	kv.producerCond.Signal()
+	if kv.lastAppliedId != id {
+		// todo return error here.
+		log.Fatalf("Not implemented!")
+	}
+	value = kv.lastAppliedKeyValue.Value
+	kv.consumerCond.L.Unlock()
 	reply.Value = value
-	kv.logMsg(KV_GET, "Received value on notifyCh, returning")
+	kv.logMsg(KV_GET, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
 }
 
 func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
-	command := Command{
-		Id:    kv.getId(),
+	id := kv.getId()
+	command := KeyValue{
+		Id:    id,
 		Op:    args.Op,
 		Key:   args.Key,
 		Value: args.Value,
 	}
 	// we're the leader! Start an agreement for this key.
-	_, _, isLeader := kv.rf.Start(command)
+	index, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
 		return
 	}
-	<-kv.notifyCh
+	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Sent command with id %v, will wait for index %v!", id, index))
+
+	kv.consumerCond.L.Lock()
+	for kv.lastAppliedIndex != index {
+		kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
+		kv.consumerCond.Wait()
+	}
+	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Found nmy expected index %v! Signaling producer...", index))
+	kv.consumed = true
+	kv.producerCond.Signal()
+	if kv.lastAppliedId != id {
+		// todo return error here.
+		log.Fatalf("Not implemented!")
+	}
+	kv.consumerCond.L.Unlock()
+	kv.logMsg(KV_PUTAPPEND, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
 }
 
 //
@@ -79,47 +112,52 @@ func (kv *KVServer) killed() bool {
 // for any long-running work.
 //
 func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int) *KVServer {
-	// TODO call labgob.Register on structures you want
-	labgob.Register(Command{})
-	// Go's RPC library to marshall/unmarshall.
+	labgob.Register(KeyValue{})
 	kv := new(KVServer)
 	kv.me = me
 	kv.maxraftstate = maxraftstate
 	kv.stateMachine = make(map[string]string)
-	kv.notifyCh = make(chan string)
+	kv.consumerCond = *sync.NewCond(&kv.mu)
+	kv.producerCond = *sync.NewCond(&kv.mu)
+	kv.applyCh = make(chan raft.ApplyMsg)
+	kv.consumed = true
 	kv.logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 
-	// You may need initialization code here.
-
-	kv.applyCh = make(chan raft.ApplyMsg)
 	go kv.listenOnApplyCh()
 	kv.rf = raft.Make(servers, me, persister, kv.applyCh)
-
-	// You may need initialization code here.
-
 	return kv
 }
 
 func (kv *KVServer) listenOnApplyCh() {
 	for applyMsg := range kv.applyCh {
+		keyValue := applyMsg.Command.(KeyValue)
+		key := keyValue.Key
+		value := keyValue.Value
+		operation := keyValue.Op
+		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Got new message on applyMsg %v (index %v)", applyMsg.Command, applyMsg.CommandIndex))
 		kv.mu.Lock()
-		command := applyMsg.Command.(Command)
-		key := command.Key
-		value := command.Value
-		operation := command.Op
 		if operation == PutVal {
 			kv.stateMachine[key] = value
 			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Updated value for %v to %v", key, kv.stateMachine[key]))
 		} else if operation == AppendVal {
 			prevValue := kv.stateMachine[key]
 			kv.stateMachine[key] = prevValue + value
-			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Append value to key %v. New value is %v", key, kv.stateMachine[key]))
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Appended value to key %v. New value is %v", key, kv.stateMachine[key]))
+		} else {
+			value = kv.stateMachine[key]
 		}
 		_, isLeader := kv.rf.GetState()
 		if isLeader {
-			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending on notifyCh"))
-			kv.notifyCh <- kv.stateMachine[key]
-			kv.logMsg(KV_APPLYCH, "Sent on notifyCh!")
+			for !kv.consumed {
+				kv.producerCond.Wait()
+			}
+			kv.consumed = false
+			kv.lastAppliedId = keyValue.Id
+			kv.lastAppliedIndex = applyMsg.CommandIndex
+			kv.lastAppliedKeyValue.Key = key
+			kv.lastAppliedKeyValue.Value = value
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending consumer broadcast!"))
+			kv.consumerCond.Broadcast()
 		}
 
 		kv.mu.Unlock()
