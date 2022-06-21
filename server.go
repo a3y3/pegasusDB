@@ -44,8 +44,8 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 		log.Fatalf("Not implemented!")
 	}
 	reply.Value = kv.lastAppliedKeyValue.Value
-	kv.consumerCond.L.Unlock()
 	kv.logMsg(topic, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
+	kv.consumerCond.L.Unlock()
 }
 
 //

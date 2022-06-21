@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"math/big"
+	"sync"
 	"time"
 
 	"6.824/labrpc"
@@ -64,26 +65,47 @@ func (ck *Clerk) Append(key string, value string) {
 }
 
 func (ck *Clerk) updateCurrentLeader() {
-	for true {
-		//todo parallelize this loop
-		for i, server := range ck.servers {
-			findLeaderArgs := FindLeaderArgs{}
-			findLeaderReply := FindLeaderReply{}
-			ok := server.Call("KVServer.IsLeader", &findLeaderArgs, &findLeaderReply)
-			if ok {
-				if findLeaderReply.IsLeader {
-					ck.currentLeader = i
-					logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader S%v", i))
+	leaderFound := false
+	var mutex sync.Mutex
+	cond := sync.NewCond(&mutex)
+	for i, server := range ck.servers {
+		go func(i int, server *labrpc.ClientEnd) {
+			for true {
+				mutex.Lock()
+				exit := leaderFound
+				mutex.Unlock()
+				if exit {
 					return
-				} else {
-					logMsg(CK_UPDATE_LEADER, fmt.Sprintf("K%v is not the leader", i))
 				}
-			} else {
-				logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Failed to contact server K%v", i))
+				findLeaderArgs := FindLeaderArgs{}
+				findLeaderReply := FindLeaderReply{}
+				ok := server.Call("KVServer.IsLeader", &findLeaderArgs, &findLeaderReply)
+				if ok {
+					if findLeaderReply.IsLeader {
+						ck.currentLeader = i
+						logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader S%v", i))
+						mutex.Lock()
+						leaderFound = true
+						cond.Signal()
+						mutex.Unlock()
+						return
+					} else {
+						logMsg(CK_UPDATE_LEADER, fmt.Sprintf("K%v is not the leader", i))
+					}
+				} else {
+					logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Failed to contact server K%v", i))
+				}
+
+				// no one claims to be a leader. Wait for a while for an election, then try again.
+				logMsg(CK_UPDATE_LEADER, "Found no leader, going to sleep...")
+				time.Sleep(time.Millisecond * time.Duration(LEADER_WAIT))
 			}
-		}
-		// no one claims to be a leader. Wait for a while for an election, then try again.
-		logMsg(CK_UPDATE_LEADER, "Found no leader, going to sleep...")
-		time.Sleep(time.Millisecond * time.Duration(LEADER_WAIT))
+		}(i, server)
 	}
+
+	cond.L.Lock()
+	for !leaderFound {
+		cond.Wait()
+	}
+	cond.L.Unlock()
 }
