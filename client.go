@@ -20,7 +20,8 @@ func nrand() int64 {
 func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 	ck := new(Clerk)
 	ck.servers = servers
-	logMsg(CK_SETUP, "Clerk initializing!")
+	ck.client_id = nrand()
+	ck.logMsg(CK_SETUP, fmt.Sprintf("Clerk initialized with id %v", ck.client_id))
 	return ck
 }
 
@@ -34,22 +35,23 @@ func (ck *Clerk) GetPutAppend(key string, value string, op Op) string {
 		Value:     value,
 		Op:        op,
 		RequestId: requestId,
+		ClientId:  ck.client_id,
 	}
 	for true {
 		opReply := OpReply{}
-		logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Sending %v req for key %v and val %v to currentLeader", op, key, value))
+		ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Sending %v req for key %v and val %v to currentLeader", op, key, value))
 		ok := ck.servers[ck.currentLeader].Call("KVServer.AddRaftOp", &opArgs, &opReply)
 		if ok {
 			if opReply.Err == ErrWrongLeader {
-				logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
+				ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
 				ck.updateCurrentLeader()
 			} else {
 				value := opReply.Value
-				logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Returning value %v for key %v!", value, key))
+				ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Returning value %v for key %v!", value, key))
 				return value
 			}
 		} else {
-			logMsg(CK_GETPUTAPPEND, "PutAppend RPC failed!")
+			ck.logMsg(CK_GETPUTAPPEND, "PutAppend RPC failed!")
 		}
 	}
 	return ""
@@ -85,21 +87,21 @@ func (ck *Clerk) updateCurrentLeader() {
 				if ok {
 					if findLeaderReply.IsLeader {
 						ck.currentLeader = i
-						logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader S%v", i))
+						ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader S%v", i))
 						mutex.Lock()
 						leaderFound = true
 						cond.Signal()
 						mutex.Unlock()
 						return
 					} else {
-						logMsg(CK_UPDATE_LEADER, fmt.Sprintf("K%v is not the leader", i))
+						ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("K%v is not the leader", i))
 					}
 				} else {
-					logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Failed to contact server K%v", i))
+					ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Failed to contact server K%v", i))
 				}
 
 				// no one claims to be a leader. Wait for a while for an election, then try again.
-				logMsg(CK_UPDATE_LEADER, "Found no leader, going to sleep...")
+				ck.logMsg(CK_UPDATE_LEADER, "Found no leader, going to sleep...")
 				time.Sleep(time.Millisecond * time.Duration(LEADER_WAIT))
 			}
 		}(i, server)

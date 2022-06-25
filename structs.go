@@ -25,6 +25,7 @@ type Clerk struct {
 	servers        []*labrpc.ClientEnd
 	pegasusServers []*KVServer
 	currentLeader  int
+	client_id      int64
 }
 
 type KVServer struct {
@@ -74,6 +75,7 @@ type OpArgs struct {
 	Value     string
 	Op        Op
 	RequestId int64
+	ClientId  int64
 }
 
 type OpReply struct {
@@ -119,10 +121,10 @@ func init() {
 }
 
 // Logs a message with a specific topic.
-func logMsg(topic Topic, msg string) {
+func (ck *Clerk) logMsg(topic Topic, msg string) {
 	if debugVerbosity >= 1 {
 		time := time.Since(debugStart).Milliseconds()
-		log.Printf("%v %v %v\n", time, topic, msg)
+		log.Printf("%v %v %v %v\n", time, ck.client_id, topic, msg)
 	}
 }
 
