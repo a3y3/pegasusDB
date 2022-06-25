@@ -42,7 +42,7 @@ type KVServer struct {
 	producerCond        sync.Cond
 	consumed            bool
 	lastAppliedIndex    int
-	lastAppliedId       int
+	lastAppliedId       int64
 	lastAppliedKeyValue KeyValue
 }
 
@@ -70,9 +70,10 @@ const (
 type Err string
 
 type OpArgs struct {
-	Key   string
-	Value string
-	Op    Op
+	Key       string
+	Value     string
+	Op        Op
+	RequestId int64
 }
 
 type OpReply struct {
@@ -86,10 +87,10 @@ type FindLeaderReply struct {
 }
 
 type KeyValue struct {
-	Id    int
-	Op    Op
-	Key   string
-	Value string
+	RequestId int64
+	Op        Op
+	Key       string
+	Value     string
 }
 
 // Returns the level of verbosity from stdargs.

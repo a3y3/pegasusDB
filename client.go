@@ -28,10 +28,12 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 // shared by Get, Put and Append.
 //
 func (ck *Clerk) GetPutAppend(key string, value string, op Op) string {
+	requestId := nrand()
 	opArgs := OpArgs{
-		Key:   key,
-		Value: value,
-		Op:    op,
+		Key:       key,
+		Value:     value,
+		Op:        op,
+		RequestId: requestId,
 	}
 	for true {
 		opReply := OpReply{}

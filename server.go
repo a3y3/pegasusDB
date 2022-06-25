@@ -12,12 +12,12 @@ import (
 )
 
 func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
-	id := kv.getId()
+	requestId := args.RequestId
 	command := KeyValue{
-		Id:    id,
-		Op:    args.Op,
-		Key:   args.Key,
-		Value: args.Value,
+		RequestId: requestId,
+		Op:        args.Op,
+		Key:       args.Key,
+		Value:     args.Value,
 	}
 	index, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
@@ -30,7 +30,7 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	} else {
 		topic = KV_PUTAPPEND
 	}
-	kv.logMsg(topic, fmt.Sprintf("Sent command with id %v, will wait for index %v!", id, index))
+	kv.logMsg(topic, fmt.Sprintf("Sent command with id %v, will wait for index %v!", requestId, index))
 	kv.consumerCond.L.Lock()
 	for kv.lastAppliedIndex != index {
 		kv.logMsg(topic, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
@@ -39,7 +39,7 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	kv.logMsg(topic, fmt.Sprintf("Found my expected index %v! Signaling producer...", index))
 	kv.consumed = true
 	kv.producerCond.Signal()
-	if kv.lastAppliedId != id {
+	if kv.lastAppliedId != requestId {
 		// todo return error here.
 		log.Fatalf("Not implemented!")
 	}
@@ -124,7 +124,7 @@ func (kv *KVServer) listenOnApplyCh() {
 				kv.producerCond.Wait()
 			}
 			kv.consumed = false
-			kv.lastAppliedId = keyValue.Id
+			kv.lastAppliedId = keyValue.RequestId
 			kv.lastAppliedIndex = applyMsg.CommandIndex
 			kv.lastAppliedKeyValue.Key = key
 			kv.lastAppliedKeyValue.Value = value
