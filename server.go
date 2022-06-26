@@ -12,26 +12,45 @@ import (
 )
 
 func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
-	requestId := args.RequestId
-	command := KeyValue{
-		RequestId: requestId,
-		Op:        args.Op,
-		Key:       args.Key,
-		Value:     args.Value,
-	}
-	index, _, isLeader := kv.rf.Start(command)
-	if !isLeader {
-		reply.Err = ErrWrongLeader
-		return
-	}
 	var topic Topic
 	if args.Op == GetVal {
 		topic = KV_GET
 	} else {
 		topic = KV_PUTAPPEND
 	}
+	requestId := args.RequestId
+	clientId := args.ClientId
+
+	kv.mu.Lock()
+	existingReq, ok := kv.requests[clientId]
+	if ok && existingReq.Id == requestId {
+		// duplicate request!
+		// assume for now, that the old thread that submitted this request already has the result, so just fetch and return it.
+		// if this causes problems in the future, we'll need to add a delay here, or a cond var :(
+		result := existingReq.Result
+		kv.logMsg(topic, fmt.Sprintf("Duplicate request found for requestId %v! Returning existing result %v", requestId, result))
+		kv.mu.Unlock()
+		reply.Value = result
+		return
+	}
+	kv.mu.Unlock()
+
+	command := KeyValue{
+		RequestId: requestId,
+		Op:        args.Op,
+		Key:       args.Key,
+		Value:     args.Value,
+	}
+
+	index, _, isLeader := kv.rf.Start(command)
+	if !isLeader {
+		reply.Err = ErrWrongLeader
+		return
+	}
 	kv.logMsg(topic, fmt.Sprintf("Sent command with id %v, will wait for index %v!", requestId, index))
+
 	kv.consumerCond.L.Lock()
+	kv.requests[clientId] = &Request{Id: requestId}
 	for kv.lastAppliedIndex != index {
 		kv.logMsg(topic, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
 		kv.consumerCond.Wait()
@@ -44,7 +63,10 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 		log.Fatalf("Not implemented!")
 	}
 	reply.Value = kv.lastAppliedKeyValue.Value
-	kv.logMsg(topic, fmt.Sprintf("Returning value for key %v successfully!", kv.lastAppliedKeyValue.Key))
+	currentRequest := kv.requests[clientId]
+	currentRequest.Result = reply.Value
+
+	kv.logMsg(topic, fmt.Sprintf("Stored value %v, and returning it for key %v successfully!", reply.Value, kv.lastAppliedKeyValue.Key))
 	kv.consumerCond.L.Unlock()
 }
 
@@ -93,6 +115,7 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv.producerCond = *sync.NewCond(&kv.mu)
 	kv.applyCh = make(chan raft.ApplyMsg)
 	kv.consumed = true
+	kv.requests = make(map[int64]*Request)
 	kv.logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 
 	go kv.listenOnApplyCh()

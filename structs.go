@@ -45,6 +45,8 @@ type KVServer struct {
 	lastAppliedIndex    int
 	lastAppliedId       int64
 	lastAppliedKeyValue KeyValue
+
+	requests map[int64]*Request // map from client_id to request_id
 }
 
 type Op string
@@ -95,6 +97,11 @@ type KeyValue struct {
 	Value     string
 }
 
+type Request struct {
+	Id     int64
+	Result string
+}
+
 // Returns the level of verbosity from stdargs.
 func getVerbosity() int {
 	v := os.Getenv("PEGASUS_VERBOSE")
@@ -124,7 +131,7 @@ func init() {
 func (ck *Clerk) logMsg(topic Topic, msg string) {
 	if debugVerbosity >= 1 {
 		time := time.Since(debugStart).Milliseconds()
-		log.Printf("%v %v %v %v\n", time, ck.client_id, topic, msg)
+		log.Printf("%v %v %v %v\n", time, topic, ck.client_id, msg)
 	}
 }
 

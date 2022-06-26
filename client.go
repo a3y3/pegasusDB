@@ -75,19 +75,13 @@ func (ck *Clerk) updateCurrentLeader() {
 	for i, server := range ck.servers {
 		go func(i int, server *labrpc.ClientEnd) {
 			for true {
-				mutex.Lock()
-				exit := leaderFound
-				mutex.Unlock()
-				if exit {
-					return
-				}
 				findLeaderArgs := FindLeaderArgs{}
 				findLeaderReply := FindLeaderReply{}
 				ok := server.Call("KVServer.IsLeader", &findLeaderArgs, &findLeaderReply)
 				if ok {
 					if findLeaderReply.IsLeader {
 						ck.currentLeader = i
-						ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader S%v", i))
+						ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader K%v", i))
 						mutex.Lock()
 						leaderFound = true
 						cond.Signal()
@@ -99,9 +93,14 @@ func (ck *Clerk) updateCurrentLeader() {
 				} else {
 					ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Failed to contact server K%v", i))
 				}
-
+				mutex.Lock()
+				exit := leaderFound
+				mutex.Unlock()
+				if exit {
+					return
+				}
 				// no one claims to be a leader. Wait for a while for an election, then try again.
-				ck.logMsg(CK_UPDATE_LEADER, "Found no leader, going to sleep...")
+				ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Going to sleep since %v is not the leader", i))
 				time.Sleep(time.Millisecond * time.Duration(LEADER_WAIT))
 			}
 		}(i, server)
