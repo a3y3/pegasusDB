@@ -52,6 +52,7 @@ func (ck *Clerk) GetPutAppend(key string, value string, op Op) string {
 			}
 		} else {
 			ck.logMsg(CK_GETPUTAPPEND, "PutAppend RPC failed!")
+			ck.updateCurrentLeader()
 		}
 	}
 	return ""

@@ -42,14 +42,15 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 		Value:     args.Value,
 	}
 
+	kv.consumerCond.L.Lock()
 	index, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
+		kv.consumerCond.L.Unlock()
 		return
 	}
 	kv.logMsg(topic, fmt.Sprintf("Sent command with id %v, will wait for index %v!", requestId, index))
 
-	kv.consumerCond.L.Lock()
 	kv.requests[clientId] = &Request{Id: requestId}
 	for kv.lastAppliedIndex != index {
 		kv.logMsg(topic, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
@@ -143,10 +144,26 @@ func (kv *KVServer) listenOnApplyCh() {
 		}
 		_, isLeader := kv.rf.GetState()
 		if isLeader {
-			for !kv.consumed {
-				kv.producerCond.Wait()
+			// before waiting, we need to check if someone is even expecting this message.
+			// go through the requests map, and see if any values match RequestId.
+			someonesWaiting := false
+			for _, v := range kv.requests {
+				if v.Id == keyValue.RequestId {
+					someonesWaiting = true
+					break
+				}
 			}
-			kv.consumed = false
+			if someonesWaiting {
+				// wait for the previous value to be consumed by them.
+				for !kv.consumed {
+					kv.producerCond.Wait()
+				}
+				kv.consumed = false
+			} else {
+				kv.logMsg(KV_APPLYCH, fmt.Sprintf("Skipped waiting because no one is waiting for requestId %v", keyValue.RequestId))
+				kv.consumed = true // treat the current value to be consumed because no one is going to (and some previous leader already did)
+			}
+
 			kv.lastAppliedId = keyValue.RequestId
 			kv.lastAppliedIndex = applyMsg.CommandIndex
 			kv.lastAppliedKeyValue.Key = key
