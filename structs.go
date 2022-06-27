@@ -16,9 +16,10 @@ const (
 )
 
 const (
-	OK             = "OK"
-	ErrNoKey       = "ErrNoKey"
-	ErrWrongLeader = "ErrWrongLeader"
+	OK                = "OK"
+	ErrNoKey          = "ErrNoKey"
+	ErrWrongLeader    = "ErrWrongLeader"
+	ErrNotFinishedYet = "ErrNotFinishedYet"
 )
 
 type Clerk struct {
@@ -99,7 +100,12 @@ type KeyValue struct {
 
 type Request struct {
 	Id     int64
-	Result string
+	Result Result
+}
+
+type Result struct {
+	isFinished bool
+	Value      string
 }
 
 // Returns the level of verbosity from stdargs.

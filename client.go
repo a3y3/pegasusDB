@@ -45,11 +45,11 @@ func (ck *Clerk) GetPutAppend(key string, value string, op Op) string {
 			if opReply.Err == ErrWrongLeader {
 				ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Contacted wrong leader (%v), updating leader list...", ck.currentLeader))
 				ck.updateCurrentLeader()
-			} else {
+			} else if opReply.Err == "" { // no errors
 				value := opReply.Value
 				ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Returning value %v for key %v!", value, key))
 				return value
-			}
+			} // in all other errors, resend the request.
 		} else {
 			ck.logMsg(CK_GETPUTAPPEND, "PutAppend RPC failed!")
 			ck.updateCurrentLeader()

@@ -23,17 +23,19 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 
 	kv.mu.Lock()
 	existingReq, ok := kv.requests[clientId]
+	kv.mu.Unlock()
 	if ok && existingReq.Id == requestId {
 		// duplicate request!
-		// assume for now, that the old thread that submitted this request already has the result, so just fetch and return it.
-		// if this causes problems in the future, we'll need to add a delay here, or a cond var :(
 		result := existingReq.Result
-		kv.logMsg(topic, fmt.Sprintf("Duplicate request found for requestId %v! Returning existing result %v", requestId, result))
-		kv.mu.Unlock()
-		reply.Value = result
+		if !result.isFinished {
+			// the old thread hasn't gotten the result yet - we can tell this to the client who can resubmit this req after a timeout.
+			reply.Err = ErrNotFinishedYet
+			return
+		}
+		kv.logMsg(topic, fmt.Sprintf("Duplicate request found for requestId %v! Returning existing result %v", requestId, result.Value))
+		reply.Value = result.Value
 		return
 	}
-	kv.mu.Unlock()
 
 	command := KeyValue{
 		RequestId: requestId,
@@ -55,6 +57,15 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	for kv.lastAppliedIndex != index {
 		kv.logMsg(topic, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
 		kv.consumerCond.Wait()
+		_, isStillLeader := kv.rf.GetState()
+		if !isStillLeader {
+			// this server isn't even the leader anymore - we need to tell that to the client.
+			kv.logMsg(topic, "I'm not the leader anymore! Returning ErrWrongLeader")
+			reply.Err = ErrWrongLeader
+			delete(kv.requests, clientId)
+			kv.consumerCond.L.Unlock()
+			return
+		}
 	}
 	kv.logMsg(topic, fmt.Sprintf("Found my expected index %v! Signaling producer...", index))
 	kv.consumed = true
@@ -65,7 +76,7 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	}
 	reply.Value = kv.lastAppliedKeyValue.Value
 	currentRequest := kv.requests[clientId]
-	currentRequest.Result = reply.Value
+	currentRequest.Result = Result{isFinished: true, Value: reply.Value}
 
 	kv.logMsg(topic, fmt.Sprintf("Stored value %v, and returning it for key %v successfully!", reply.Value, kv.lastAppliedKeyValue.Key))
 	kv.consumerCond.L.Unlock()
@@ -169,6 +180,9 @@ func (kv *KVServer) listenOnApplyCh() {
 			kv.lastAppliedKeyValue.Key = key
 			kv.lastAppliedKeyValue.Value = value
 			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending consumer broadcast!"))
+			kv.consumerCond.Broadcast()
+		} else {
+			kv.logMsg(KV_APPLYCH, "Sending a consumer broadcast in case I was a previous leader")
 			kv.consumerCond.Broadcast()
 		}
 
