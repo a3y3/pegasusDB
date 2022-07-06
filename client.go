@@ -22,24 +22,34 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 	ck.servers = servers
 	ck.client_id = nrand()
 	ck.logMsg(CK_SETUP, fmt.Sprintf("Clerk initialized with id %v", ck.client_id))
+	go ck.periodicallySendGet()
 	return ck
+}
+
+// periodically send a Get operation to force a leader to commit entries from previous terms that aren't committed - see issue #11.
+func (ck *Clerk) periodicallySendGet() {
+	fake_id := int64(FAKE_CLIENT_ID)
+	requestId := nrand()
+	for true {
+		ck.logMsg(CK_PER_GET, fmt.Sprintf("Sending no-op GET! (fake client_id %v)", fake_id))
+		opArgs := OpArgs{
+			Key:       "fake key",
+			Op:        GetVal,
+			RequestId: requestId,
+			ClientId:  fake_id,
+		}
+		ck.GetPutAppend(opArgs)
+		time.Sleep(time.Millisecond * time.Duration(PERIODIC_GET_WAIT))
+	}
 }
 
 //
 // shared by Get, Put and Append.
 //
-func (ck *Clerk) GetPutAppend(key string, value string, op Op) string {
-	requestId := nrand()
-	opArgs := OpArgs{
-		Key:       key,
-		Value:     value,
-		Op:        op,
-		RequestId: requestId,
-		ClientId:  ck.client_id,
-	}
+func (ck *Clerk) GetPutAppend(opArgs OpArgs) string {
 	for true {
 		opReply := OpReply{}
-		ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Sending %v req for key %v and val %v to currentLeader", op, key, value))
+		ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Sending %v req for key %v and val %v to currentLeader", opArgs.Op, opArgs.Key, opArgs.Value))
 		ok := ck.servers[ck.currentLeader].Call("KVServer.AddRaftOp", &opArgs, &opReply)
 		if ok {
 			if opReply.Err == ErrWrongLeader {
@@ -47,9 +57,12 @@ func (ck *Clerk) GetPutAppend(key string, value string, op Op) string {
 				ck.updateCurrentLeader()
 			} else if opReply.Err == "" { // no errors
 				value := opReply.Value
-				ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Returning value %v for key %v!", value, key))
+				ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Returning value %v for key %v!", value, opArgs.Key))
 				return value
-			} // in all other errors, resend the request.
+			} else {
+				// in all other errors, resend the request.
+				ck.logMsg(CK_GETPUTAPPEND, fmt.Sprintf("Got err %v, re-sending req!", opReply.Err))
+			}
 		} else {
 			ck.logMsg(CK_GETPUTAPPEND, "PutAppend RPC failed!")
 			ck.updateCurrentLeader()
@@ -59,14 +72,35 @@ func (ck *Clerk) GetPutAppend(key string, value string, op Op) string {
 }
 
 func (ck *Clerk) Get(key string) string {
-	return ck.GetPutAppend(key, "", GetVal)
+	opArgs := OpArgs{
+		Key:       key,
+		Value:     "",
+		Op:        GetVal,
+		RequestId: nrand(),
+		ClientId:  ck.client_id,
+	}
+	return ck.GetPutAppend(opArgs)
 }
 
 func (ck *Clerk) Put(key string, value string) {
-	ck.GetPutAppend(key, value, PutVal)
+	opArgs := OpArgs{
+		Key:       key,
+		Value:     value,
+		Op:        PutVal,
+		RequestId: nrand(),
+		ClientId:  ck.client_id,
+	}
+	ck.GetPutAppend(opArgs)
 }
 func (ck *Clerk) Append(key string, value string) {
-	ck.GetPutAppend(key, value, AppendVal)
+	opArgs := OpArgs{
+		Key:       key,
+		Value:     value,
+		Op:        AppendVal,
+		RequestId: nrand(),
+		ClientId:  ck.client_id,
+	}
+	ck.GetPutAppend(opArgs)
 }
 
 func (ck *Clerk) updateCurrentLeader() {

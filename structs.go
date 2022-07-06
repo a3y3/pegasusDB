@@ -12,7 +12,9 @@ import (
 )
 
 const (
-	LEADER_WAIT = raft.HB_WAIT_MIN // wait for these many ms before requerying for a new leader.
+	LEADER_WAIT       = raft.HB_WAIT_MIN // wait for these many ms before requerying for a new leader.
+	PERIODIC_GET_WAIT = 500
+	FAKE_CLIENT_ID    = -111
 )
 
 const (
@@ -20,6 +22,7 @@ const (
 	ErrNoKey          = "ErrNoKey"
 	ErrWrongLeader    = "ErrWrongLeader"
 	ErrNotFinishedYet = "ErrNotFinishedYet"
+	ErrLogOverwritten = "ErrLogOverwritten"
 )
 
 type Clerk struct {
@@ -64,6 +67,7 @@ const (
 	CK_SETUP         Topic = "CK_SETUP"
 	CK_UPDATE_LEADER Topic = "CK_UPDATE_LEADER"
 	CK_GETPUTAPPEND  Topic = "CK_GETPUTAPPEND"
+	CK_PER_GET       Topic = "CK_PER_GET"
 
 	KV_SETUP     Topic = "KV_SETUP"
 	KV_APPLYCH   Topic = "KV_APPLYCH"
@@ -101,6 +105,7 @@ type KeyValue struct {
 type Request struct {
 	Id     int64
 	Result Result
+	Index  int
 }
 
 type Result struct {

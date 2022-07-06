@@ -2,7 +2,6 @@ package pegasus
 
 import (
 	"fmt"
-	"log"
 	"sync"
 	"sync/atomic"
 
@@ -24,7 +23,7 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	kv.mu.Lock()
 	existingReq, ok := kv.requests[clientId]
 	kv.mu.Unlock()
-	if ok && existingReq.Id == requestId {
+	if ok && existingReq.Id == requestId && clientId != FAKE_CLIENT_ID {
 		// duplicate request!
 		result := existingReq.Result
 		if !result.isFinished {
@@ -53,26 +52,20 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	}
 	kv.logMsg(topic, fmt.Sprintf("Sent command with id %v, will wait for index %v!", requestId, index))
 
-	kv.requests[clientId] = &Request{Id: requestId}
+	kv.requests[clientId] = &Request{Id: requestId, Index: index}
 	for kv.lastAppliedIndex != index {
 		kv.logMsg(topic, fmt.Sprintf("lastAppliedIndex %v != expectedIndex %v, so will sleep", kv.lastAppliedIndex, index))
 		kv.consumerCond.Wait()
-		_, isStillLeader := kv.rf.GetState()
-		if !isStillLeader {
-			// this server isn't even the leader anymore - we need to tell that to the client.
-			kv.logMsg(topic, "I'm not the leader anymore! Returning ErrWrongLeader")
-			reply.Err = ErrWrongLeader
-			delete(kv.requests, clientId)
-			kv.consumerCond.L.Unlock()
-			return
-		}
 	}
 	kv.logMsg(topic, fmt.Sprintf("Found my expected index %v! Signaling producer...", index))
 	kv.consumed = true
 	kv.producerCond.Signal()
 	if kv.lastAppliedId != requestId {
-		// todo return error here.
-		log.Fatalf("Not implemented!")
+		kv.logMsg(topic, fmt.Sprintf("Found a different log message id (%v) than expected (%v)", kv.lastAppliedId, requestId))
+		reply.Err = ErrLogOverwritten
+		delete(kv.requests, clientId)
+		kv.consumerCond.L.Unlock()
+		return
 	}
 	reply.Value = kv.lastAppliedKeyValue.Value
 	currentRequest := kv.requests[clientId]
@@ -153,38 +146,33 @@ func (kv *KVServer) listenOnApplyCh() {
 		} else {
 			value = kv.stateMachine[key]
 		}
-		_, isLeader := kv.rf.GetState()
-		if isLeader {
-			// before waiting, we need to check if someone is even expecting this message.
-			// go through the requests map, and see if any values match RequestId.
-			someonesWaiting := false
-			for _, v := range kv.requests {
-				if v.Id == keyValue.RequestId {
-					someonesWaiting = true
-					break
-				}
-			}
-			if someonesWaiting {
-				// wait for the previous value to be consumed by them.
-				for !kv.consumed {
-					kv.producerCond.Wait()
-				}
-				kv.consumed = false
-			} else {
-				kv.logMsg(KV_APPLYCH, fmt.Sprintf("Skipped waiting because no one is waiting for requestId %v", keyValue.RequestId))
-				kv.consumed = true // treat the current value to be consumed because no one is going to (and some previous leader already did)
-			}
 
-			kv.lastAppliedId = keyValue.RequestId
-			kv.lastAppliedIndex = applyMsg.CommandIndex
-			kv.lastAppliedKeyValue.Key = key
-			kv.lastAppliedKeyValue.Value = value
-			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending consumer broadcast!"))
-			kv.consumerCond.Broadcast()
-		} else {
-			kv.logMsg(KV_APPLYCH, "Sending a consumer broadcast in case I was a previous leader")
-			kv.consumerCond.Broadcast()
+		// before waiting, we need to check if someone is even expecting this message.
+		// go through the requests map, and see if any values match RequestId.
+		someonesWaiting := false
+		for _, v := range kv.requests {
+			if v.Index == applyMsg.CommandIndex {
+				someonesWaiting = true
+				break
+			}
 		}
+		if someonesWaiting {
+			// wait for the previous value to be consumed by them.
+			for !kv.consumed {
+				kv.producerCond.Wait()
+			}
+			kv.consumed = false
+		} else {
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Skipped waiting because no one is waiting for index %v", applyMsg.CommandIndex))
+			kv.consumed = true // treat the current value to be consumed because no one is going to (and some previous leader already did)
+		}
+
+		kv.lastAppliedId = keyValue.RequestId
+		kv.lastAppliedIndex = applyMsg.CommandIndex
+		kv.lastAppliedKeyValue.Key = key
+		kv.lastAppliedKeyValue.Value = value
+		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending consumer broadcast!"))
+		kv.consumerCond.Broadcast()
 
 		kv.mu.Unlock()
 	}
