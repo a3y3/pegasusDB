@@ -22,25 +22,7 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 	ck.servers = servers
 	ck.client_id = nrand()
 	ck.logMsg(CK_SETUP, fmt.Sprintf("Clerk initialized with id %v", ck.client_id))
-	go ck.periodicallySendGet()
 	return ck
-}
-
-// periodically send a Get operation to force a leader to commit entries from previous terms that aren't committed - see issue #11.
-func (ck *Clerk) periodicallySendGet() {
-	fake_id := int64(FAKE_CLIENT_ID)
-	requestId := nrand()
-	for true {
-		ck.logMsg(CK_PER_GET, fmt.Sprintf("Sending no-op GET! (fake client_id %v)", fake_id))
-		opArgs := OpArgs{
-			Key:       "fake key",
-			Op:        GetVal,
-			RequestId: requestId,
-			ClientId:  fake_id,
-		}
-		ck.GetPutAppend(opArgs)
-		time.Sleep(time.Millisecond * time.Duration(PERIODIC_GET_WAIT))
-	}
 }
 
 //
@@ -106,7 +88,7 @@ func (ck *Clerk) Append(key string, value string) {
 func (ck *Clerk) updateCurrentLeader() {
 	leaderFound := false
 	var mutex sync.Mutex
-	cond := sync.NewCond(&mutex)
+	newLeader := make(chan int)
 	for i, server := range ck.servers {
 		go func(i int, server *labrpc.ClientEnd) {
 			for true {
@@ -115,11 +97,10 @@ func (ck *Clerk) updateCurrentLeader() {
 				ok := server.Call("KVServer.IsLeader", &findLeaderArgs, &findLeaderReply)
 				if ok {
 					if findLeaderReply.IsLeader {
-						ck.currentLeader = i
-						ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader K%v", i))
 						mutex.Lock()
+						ck.logMsg(CK_UPDATE_LEADER, fmt.Sprintf("Found new leader K%v", i))
 						leaderFound = true
-						cond.Signal()
+						newLeader <- i
 						mutex.Unlock()
 						return
 					} else {
@@ -141,9 +122,5 @@ func (ck *Clerk) updateCurrentLeader() {
 		}(i, server)
 	}
 
-	cond.L.Lock()
-	for !leaderFound {
-		cond.Wait()
-	}
-	cond.L.Unlock()
+	ck.currentLeader = <-newLeader
 }
