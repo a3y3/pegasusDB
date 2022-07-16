@@ -15,6 +15,7 @@ const (
 	LEADER_WAIT       = raft.HB_WAIT_MIN // wait for these many ms before requerying for a new leader.
 	PERIODIC_GET_WAIT = 500
 	FAKE_CLIENT_ID    = -111
+	FAKE_REQUEST_ID   = -112
 )
 
 const (
@@ -48,7 +49,7 @@ type KVServer struct {
 	consumed            bool
 	lastAppliedIndex    int
 	lastAppliedId       int64
-	lastAppliedKeyValue KeyValue
+	lastAppliedKeyValue PegasusCommand
 
 	requests map[int64]*Request // map from client_id to request_id
 }
@@ -95,7 +96,7 @@ type FindLeaderReply struct {
 	IsLeader bool
 }
 
-type KeyValue struct {
+type PegasusCommand struct {
 	RequestId int64
 	Op        Op
 	Key       string
