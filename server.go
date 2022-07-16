@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"6.824/labgob"
 	"6.824/labrpc"
@@ -23,7 +24,7 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	kv.mu.Lock()
 	existingReq, ok := kv.requests[clientId]
 	kv.mu.Unlock()
-	if ok && existingReq.Id == requestId && clientId != FAKE_CLIENT_ID {
+	if ok && existingReq.Id == requestId {
 		// duplicate request!
 		result := existingReq.Result
 		if !result.isFinished {
@@ -36,7 +37,7 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 		return
 	}
 
-	command := KeyValue{
+	command := PegasusCommand{
 		RequestId: requestId,
 		Op:        args.Op,
 		Key:       args.Key,
@@ -47,6 +48,11 @@ func (kv *KVServer) AddRaftOp(args *OpArgs, reply *OpReply) {
 	index, _, isLeader := kv.rf.Start(command)
 	if !isLeader {
 		reply.Err = ErrWrongLeader
+		kv.consumerCond.L.Unlock()
+		return
+	}
+	if requestId == FAKE_REQUEST_ID {
+		// process no further, this req exists only as an HB
 		kv.consumerCond.L.Unlock()
 		return
 	}
@@ -111,7 +117,7 @@ func (kv *KVServer) killed() bool {
 // for any long-running work.
 //
 func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int) *KVServer {
-	labgob.Register(KeyValue{})
+	labgob.Register(PegasusCommand{})
 	kv := new(KVServer)
 	kv.me = me
 	kv.maxraftstate = maxraftstate
@@ -125,30 +131,41 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 
 	go kv.listenOnApplyCh()
 	kv.rf = raft.Make(servers, me, persister, kv.applyCh)
+	go kv.sendPeriodicGet()
 	return kv
 }
 
 func (kv *KVServer) listenOnApplyCh() {
 	for applyMsg := range kv.applyCh {
-		keyValue := applyMsg.Command.(KeyValue)
-		key := keyValue.Key
-		value := keyValue.Value
-		operation := keyValue.Op
+		pegasusCommand := applyMsg.Command.(PegasusCommand)
+		key := pegasusCommand.Key
+		value := pegasusCommand.Value
+		operation := pegasusCommand.Op
+
 		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Got new message on applyMsg %v (index %v)", applyMsg.Command, applyMsg.CommandIndex))
 		kv.mu.Lock()
 		if operation == PutVal {
 			kv.stateMachine[key] = value
-			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Updated value for %v to %v", key, kv.stateMachine[key]))
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Finished operation PutVal. Updated value for %v to %v", key, kv.stateMachine[key]))
 		} else if operation == AppendVal {
 			prevValue := kv.stateMachine[key]
 			kv.stateMachine[key] = prevValue + value
-			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Appended value to key %v. New value is %v", key, kv.stateMachine[key]))
+			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Finished operation AppendVal for key %v. New value is %v", key, kv.stateMachine[key]))
 		} else {
 			value = kv.stateMachine[key]
 		}
 
-		// before waiting, we need to check if someone is even expecting this message.
-		// go through the requests map, and see if any values match RequestId.
+		kv.lastAppliedId = pegasusCommand.RequestId
+		kv.lastAppliedIndex = applyMsg.CommandIndex
+		kv.lastAppliedKeyValue.Key = key
+		kv.lastAppliedKeyValue.Value = value
+		kv.consumed = false
+		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending consumer broadcast!"))
+		kv.consumerCond.Broadcast()
+
+		// wait for the value we just produced to be consumed, just before producing another value
+		// However, before waiting, we need to check if someone is even expecting this message.
+		// go through the requests map, and see if any values match this CommandIndex.
 		someonesWaiting := false
 		for _, v := range kv.requests {
 			if v.Index == applyMsg.CommandIndex {
@@ -157,24 +174,31 @@ func (kv *KVServer) listenOnApplyCh() {
 			}
 		}
 		if someonesWaiting {
-			// wait for the previous value to be consumed by them.
+			// wait for the current value to be consumed by them.
 			for !kv.consumed {
+				kv.logMsg(KV_APPLYCH, fmt.Sprintf("Going into wait... context: index=%v", applyMsg.CommandIndex))
 				kv.producerCond.Wait()
+				kv.logMsg(KV_APPLYCH, fmt.Sprintf("Awoken! context: index=%v", applyMsg.CommandIndex))
 			}
-			kv.consumed = false
 		} else {
 			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Skipped waiting because no one is waiting for index %v", applyMsg.CommandIndex))
 			kv.consumed = true // treat the current value to be consumed because no one is going to (and some previous leader already did)
 		}
 
-		kv.lastAppliedId = keyValue.RequestId
-		kv.lastAppliedIndex = applyMsg.CommandIndex
-		kv.lastAppliedKeyValue.Key = key
-		kv.lastAppliedKeyValue.Value = value
-		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Sending consumer broadcast!"))
-		kv.consumerCond.Broadcast()
-
 		kv.mu.Unlock()
+	}
+}
+
+func (kv *KVServer) sendPeriodicGet() {
+	for {
+		time.Sleep(time.Millisecond * PERIODIC_GET_WAIT)
+		opArgs := OpArgs{
+			Key:       "fake key",
+			Op:        GetVal,
+			RequestId: FAKE_REQUEST_ID,
+			ClientId:  FAKE_CLIENT_ID,
+		}
+		kv.AddRaftOp(&opArgs, &OpReply{})
 	}
 }
 
