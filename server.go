@@ -127,6 +127,7 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv.applyCh = make(chan raft.ApplyMsg)
 	kv.consumed = true
 	kv.requests = make(map[int64]*Request)
+	kv.duplicate = make(map[int64]bool)
 	kv.logMsg(KV_SETUP, fmt.Sprintf("Initialized peagasus server S%v!", me))
 
 	go kv.listenOnApplyCh()
@@ -144,16 +145,19 @@ func (kv *KVServer) listenOnApplyCh() {
 
 		kv.logMsg(KV_APPLYCH, fmt.Sprintf("Got new message on applyMsg %v (index %v)", applyMsg.Command, applyMsg.CommandIndex))
 		kv.mu.Lock()
-		if operation == PutVal {
+		_, duplicate := kv.duplicate[pegasusCommand.RequestId]
+		if !duplicate && operation == PutVal {
 			kv.stateMachine[key] = value
 			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Finished operation PutVal. Updated value for %v to %v", key, kv.stateMachine[key]))
-		} else if operation == AppendVal {
+		} else if !duplicate && operation == AppendVal {
 			prevValue := kv.stateMachine[key]
 			kv.stateMachine[key] = prevValue + value
 			kv.logMsg(KV_APPLYCH, fmt.Sprintf("Finished operation AppendVal for key %v. New value is %v", key, kv.stateMachine[key]))
 		} else {
 			value = kv.stateMachine[key]
 		}
+
+		kv.duplicate[pegasusCommand.RequestId] = true
 
 		kv.lastAppliedId = pegasusCommand.RequestId
 		kv.lastAppliedIndex = applyMsg.CommandIndex

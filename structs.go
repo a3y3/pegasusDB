@@ -51,7 +51,8 @@ type KVServer struct {
 	lastAppliedId       int64
 	lastAppliedKeyValue PegasusCommand
 
-	requests map[int64]*Request // map from client_id to request_id
+	requests  map[int64]*Request // map from client_id to request_id
+	duplicate map[int64]bool
 }
 
 type Op string
